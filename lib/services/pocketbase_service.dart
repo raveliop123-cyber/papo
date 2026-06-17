@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../models/models.dart';
 
 class PocketBaseService extends ChangeNotifier {
-  final PocketBase pb = PocketBase('http://82.165.150.150:20080');
+  final PocketBase pb = PocketBase('http://82.165.150.150:20080/');
 
   User? _currentUser;
   User? get currentUser => _currentUser;
@@ -12,9 +12,7 @@ class PocketBaseService extends ChangeNotifier {
 
   Future<bool> login(String phone, String pin) async {
     try {
-      // PocketBase uses email/username as identity for authWithPassword.
-      // We assume the user has set their username to be their phone number during signup.
-      final authData = await pb.collection('users').authWithPassword(phone, pin);
+      final authData = await pb.collection('papo_users').authWithPassword(phone, pin);
       if (authData.record != null) {
         _currentUser = User.fromRecord(authData.record!.toJson());
         notifyListeners();
