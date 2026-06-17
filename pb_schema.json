@@ -1,0 +1,903 @@
+{
+    "collections": [
+        {
+            "id": "_pb_users_auth_",
+            "name": "users",
+            "type": "auth",
+            "system": true,
+            "schema": [
+                {
+                    "id": "users_name",
+                    "name": "name",
+                    "type": "text",
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": null,
+                        "max": null,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "users_avatar",
+                    "name": "avatar",
+                    "type": "file",
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "maxSize": 5242880,
+                        "mimeTypes": [
+                            "image/jpeg",
+                            "image/png",
+                            "image/svg+xml",
+                            "image/gif",
+                            "image/webp"
+                        ],
+                        "thumbs": []
+                    }
+                },
+                {
+                    "id": "users_phone",
+                    "name": "phone",
+                    "type": "text",
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 8,
+                        "max": 15,
+                        "pattern": "^\\+[1-9]\\d{1,14}$|^\\d{8,15}$"
+                    }
+                },
+                {
+                    "id": "users_pin",
+                    "name": "pin",
+                    "type": "text",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 4,
+                        "max": 6,
+                        "pattern": "^\\d{4,6}$"
+                    }
+                },
+                {
+                    "id": "users_is_verified",
+                    "name": "is_verified",
+                    "type": "bool",
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "users_theme",
+                    "name": "theme_preference",
+                    "type": "select",
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "light",
+                            "dark",
+                            "system"
+                        ]
+                    }
+                },
+                {
+                    "id": "users_nfc",
+                    "name": "nfc_enabled",
+                    "type": "bool",
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "id = @request.auth.id",
+            "viewRule": "id = @request.auth.id",
+            "createRule": "",
+            "updateRule": "id = @request.auth.id",
+            "deleteRule": "id = @request.auth.id",
+            "auth": {
+                "allowEmailAuth": false,
+                "allowOAuth2Auth": false,
+                "allowUsernameAuth": false,
+                "allowPhoneAuth": true,
+                "minPasswordLength": 4,
+                "onlyEmailDomains": [],
+                "onlyVerified": false,
+                "requireEmailVerification": false
+            }
+        },
+        {
+            "id": "col_papo_wallets",
+            "name": "papo_wallets",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "fld_wallet_user_relation",
+                    "name": "user",
+                    "type": "relation",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "fld_wallet_balance",
+                    "name": "balance",
+                    "type": "number",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "fld_wallet_currency",
+                    "name": "currency",
+                    "type": "text",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 3,
+                        "max": 3,
+                        "pattern": "^[A-Z]{3}$"
+                    }
+                }
+            ],
+            "listRule": "user = @request.auth.id",
+            "viewRule": "user = @request.auth.id",
+            "createRule": "user = @request.auth.id",
+            "updateRule": "user = @request.auth.id",
+            "deleteRule": "user = @request.auth.id"
+        },
+        {
+            "id": "col_papo_transactions",
+            "name": "papo_transactions",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "fld_transaction_sender",
+                    "name": "sender",
+                    "type": "relation",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "fld_transaction_receiver",
+                    "name": "receiver",
+                    "type": "relation",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "fld_transaction_amount",
+                    "name": "amount",
+                    "type": "number",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 0.01,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "fld_transaction_currency",
+                    "name": "currency",
+                    "type": "text",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 3,
+                        "max": 3,
+                        "pattern": "^[A-Z]{3}$"
+                    }
+                },
+                {
+                    "id": "fld_transaction_type",
+                    "name": "type",
+                    "type": "select",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "deposit",
+                            "withdrawal",
+                            "transfer"
+                        ]
+                    }
+                },
+                {
+                    "id": "fld_transaction_status",
+                    "name": "status",
+                    "type": "select",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "pending",
+                            "completed",
+                            "failed"
+                        ]
+                    }
+                },
+                {
+                    "id": "fld_transaction_method",
+                    "name": "method",
+                    "type": "select",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "app",
+                            "nfc",
+                            "qr",
+                            "bluetooth"
+                        ]
+                    }
+                },
+                {
+                    "id": "fld_transaction_notes",
+                    "name": "notes",
+                    "type": "text",
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": null,
+                        "max": 255,
+                        "pattern": ""
+                    }
+                }
+            ],
+            "listRule": "sender = @request.auth.id || receiver = @request.auth.id",
+            "viewRule": "sender = @request.auth.id || receiver = @request.auth.id",
+            "createRule": "sender = @request.auth.id",
+            "updateRule": "",
+            "deleteRule": ""
+        },
+        {
+            "id": "col_papo_kyc",
+            "name": "papo_kyc",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "fld_kyc_user_relation",
+                    "name": "user",
+                    "type": "relation",
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "fld_kyc_document_type",
+                    "name": "document_type",
+                    "type": "select",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "id_card",
+                            "passport",
+                            "proof_of_address"
+                        ]
+                    }
+                },
+                {
+                    "id": "fld_kyc_document_number",
+                    "name": "document_number",
+                    "type": "text",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": null,
+                        "max": null,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "fld_kyc_document_file",
+                    "name": "document_file",
+                    "type": "file",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "maxSize": 10485760,
+                        "mimeTypes": [
+                            "image/jpeg",
+                            "image/png",
+                            "application/pdf"
+                        ],
+                        "thumbs": []
+                    }
+                },
+                {
+                    "id": "fld_kyc_status",
+                    "name": "status",
+                    "type": "select",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "pending",
+                            "approved",
+                            "rejected"
+                        ]
+                    }
+                },
+                {
+                    "id": "fld_kyc_rejection_reason",
+                    "name": "rejection_reason",
+                    "type": "text",
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": null,
+                        "max": null,
+                        "pattern": ""
+                    }
+                }
+            ],
+            "listRule": "user = @request.auth.id",
+            "viewRule": "user = @request.auth.id",
+            "createRule": "user = @request.auth.id",
+            "updateRule": "",
+            "deleteRule": ""
+        },
+        {
+            "id": "col_papo_tontines",
+            "name": "papo_tontines",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "fld_tontine_name",
+                    "name": "name",
+                    "type": "text",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 3,
+                        "max": 100,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "fld_tontine_description",
+                    "name": "description",
+                    "type": "text",
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": null,
+                        "max": null,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "fld_tontine_amount",
+                    "name": "contribution_amount",
+                    "type": "number",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "fld_tontine_frequency",
+                    "name": "frequency",
+                    "type": "select",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "daily",
+                            "weekly",
+                            "monthly"
+                        ]
+                    }
+                },
+                {
+                    "id": "fld_tontine_creator",
+                    "name": "creator",
+                    "type": "relation",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "fld_tontine_status",
+                    "name": "status",
+                    "type": "select",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "pending",
+                            "active",
+                            "completed"
+                        ]
+                    }
+                }
+            ],
+            "listRule": "@request.auth.id != \"\"",
+            "viewRule": "@request.auth.id != \"\"",
+            "createRule": "@request.auth.id != \"\"",
+            "updateRule": "creator = @request.auth.id",
+            "deleteRule": "creator = @request.auth.id"
+        },
+        {
+            "id": "col_papo_tontine_members",
+            "name": "papo_tontine_members",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "fld_tm_tontine",
+                    "name": "tontine",
+                    "type": "relation",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_tontines",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "fld_tm_user",
+                    "name": "user",
+                    "type": "relation",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "fld_tm_role",
+                    "name": "role",
+                    "type": "select",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "admin",
+                            "member"
+                        ]
+                    }
+                },
+                {
+                    "id": "fld_tm_status",
+                    "name": "status",
+                    "type": "select",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "invited",
+                            "joined",
+                            "left"
+                        ]
+                    }
+                },
+                {
+                    "id": "fld_tm_rank",
+                    "name": "rank",
+                    "type": "number",
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": null,
+                        "positive": true
+                    }
+                }
+            ],
+            "listRule": "user = @request.auth.id || tontine.creator = @request.auth.id",
+            "viewRule": "user = @request.auth.id || tontine.creator = @request.auth.id",
+            "createRule": "tontine.creator = @request.auth.id || @request.auth.id != \"\"",
+            "updateRule": "user = @request.auth.id || tontine.creator = @request.auth.id",
+            "deleteRule": "tontine.creator = @request.auth.id"
+        },
+        {
+            "id": "col_papo_tontine_contributions",
+            "name": "papo_tontine_contributions",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "fld_tc_tontine",
+                    "name": "tontine",
+                    "type": "relation",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_tontines",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "fld_tc_member",
+                    "name": "member",
+                    "type": "relation",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_tontine_members",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "fld_tc_amount",
+                    "name": "amount",
+                    "type": "number",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "fld_tc_status",
+                    "name": "status",
+                    "type": "select",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "pending",
+                            "paid",
+                            "overdue"
+                        ]
+                    }
+                }
+            ],
+            "listRule": "member.user = @request.auth.id || tontine.creator = @request.auth.id",
+            "viewRule": "member.user = @request.auth.id || tontine.creator = @request.auth.id",
+            "createRule": "tontine.creator = @request.auth.id || member.user = @request.auth.id",
+            "updateRule": "tontine.creator = @request.auth.id",
+            "deleteRule": "tontine.creator = @request.auth.id"
+        },
+        {
+            "id": "col_papo_support_tickets",
+            "name": "papo_support_tickets",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "fld_st_user",
+                    "name": "user",
+                    "type": "relation",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "fld_st_subject",
+                    "name": "subject",
+                    "type": "text",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 5,
+                        "max": 200,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "fld_st_status",
+                    "name": "status",
+                    "type": "select",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "open",
+                            "in_progress",
+                            "closed"
+                        ]
+                    }
+                },
+                {
+                    "id": "fld_st_priority",
+                    "name": "priority",
+                    "type": "select",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "low",
+                            "medium",
+                            "high"
+                        ]
+                    }
+                }
+            ],
+            "listRule": "user = @request.auth.id",
+            "viewRule": "user = @request.auth.id",
+            "createRule": "user = @request.auth.id",
+            "updateRule": "user = @request.auth.id",
+            "deleteRule": ""
+        },
+        {
+            "id": "col_papo_support_messages",
+            "name": "papo_support_messages",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "fld_sm_ticket",
+                    "name": "ticket",
+                    "type": "relation",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_support_tickets",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "fld_sm_sender",
+                    "name": "sender",
+                    "type": "relation",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "fld_sm_content",
+                    "name": "content",
+                    "type": "text",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": null,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "fld_sm_file",
+                    "name": "attachment",
+                    "type": "file",
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "maxSize": 5242880,
+                        "mimeTypes": [],
+                        "thumbs": []
+                    }
+                }
+            ],
+            "listRule": "ticket.user = @request.auth.id",
+            "viewRule": "ticket.user = @request.auth.id",
+            "createRule": "ticket.user = @request.auth.id",
+            "updateRule": "",
+            "deleteRule": ""
+        },
+        {
+            "id": "col_papo_notifications",
+            "name": "papo_notifications",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "fld_notif_user",
+                    "name": "user",
+                    "type": "relation",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "fld_notif_title",
+                    "name": "title",
+                    "type": "text",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": null,
+                        "max": 100,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "fld_notif_message",
+                    "name": "message",
+                    "type": "text",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": null,
+                        "max": null,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "fld_notif_read",
+                    "name": "is_read",
+                    "type": "bool",
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "fld_notif_type",
+                    "name": "type",
+                    "type": "select",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "info",
+                            "transaction",
+                            "tontine",
+                            "support"
+                        ]
+                    }
+                }
+            ],
+            "listRule": "user = @request.auth.id",
+            "viewRule": "user = @request.auth.id",
+            "createRule": "",
+            "updateRule": "user = @request.auth.id",
+            "deleteRule": "user = @request.auth.id"
+        },
+        {
+            "id": "col_papo_ecosystem",
+            "name": "papo_ecosystem",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "fld_eco_name",
+                    "name": "name",
+                    "type": "text",
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": null,
+                        "max": null,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "fld_eco_desc",
+                    "name": "description",
+                    "type": "text",
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": null,
+                        "max": null,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "fld_eco_url",
+                    "name": "url",
+                    "type": "url",
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "exceptDomains": [],
+                        "onlyDomains": []
+                    }
+                },
+                {
+                    "id": "fld_eco_icon",
+                    "name": "icon",
+                    "type": "file",
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "maxSize": 5242880,
+                        "mimeTypes": [
+                            "image/jpeg",
+                            "image/png",
+                            "image/svg+xml"
+                        ],
+                        "thumbs": []
+                    }
+                }
+            ],
+            "listRule": "",
+            "viewRule": "",
+            "createRule": "",
+            "updateRule": "",
+            "deleteRule": ""
+        }
+    ]
+}
