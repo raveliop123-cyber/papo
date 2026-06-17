@@ -200,7 +200,7 @@ class AppTheme {
           color: _lightText,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: _lightBackground,
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -379,7 +379,7 @@ class AppTheme {
           color: _darkText,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: _darkSurface,
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -390,97 +390,97 @@ class AppTheme {
       ),
     );
   }
-
-  // ========================================================================
-  // PALETTES DE COULEURS PERSONNALISÉES
-  // ========================================================================
-
-  static class LightColors {
-    static const Color primary = _lightPrimary;
-    static const Color secondary = _lightSecondary;
-    static const Color accent = _lightAccent;
-    static const Color danger = _lightDanger;
-    static const Color neutral = _lightNeutral;
-    static const Color text = _lightText;
-    static const Color background = _lightBackground;
-    static const Color surface = _lightSurface;
-    static const Color success = _lightSecondary;
-    static const Color warning = _lightAccent;
-    static const Color error = _lightDanger;
-    static const Color info = _lightPrimary;
-    static const Color disabled = Color(0xFFD1D5DB);
-    static const Color border = Color(0xFFE5E7EB);
-    static const Color divider = Color(0xFFF3F4F6);
-  }
-
-  static class DarkColors {
-    static const Color primary = _darkPrimary;
-    static const Color secondary = _darkSecondary;
-    static const Color accent = _darkAccent;
-    static const Color danger = _darkDanger;
-    static const Color neutral = _darkNeutral;
-    static const Color text = _darkText;
-    static const Color background = _darkBackground;
-    static const Color surface = _darkSurface;
-    static const Color success = _darkSecondary;
-    static const Color warning = _darkAccent;
-    static const Color error = _darkDanger;
-    static const Color info = _darkPrimary;
-    static const Color disabled = Color(0xFF4B5563);
-    static const Color border = Color(0xFF374151);
-    static const Color divider = Color(0xFF1F2937);
-  }
-
-  // ========================================================================
-  // ESPACEMENTS
-  // ========================================================================
-
-  static const double spacing2 = 2;
-  static const double spacing4 = 4;
-  static const double spacing8 = 8;
-  static const double spacing12 = 12;
-  static const double spacing16 = 16;
-  static const double spacing20 = 20;
-  static const double spacing24 = 24;
-  static const double spacing32 = 32;
-  static const double spacing40 = 40;
-  static const double spacing48 = 48;
-
-  // ========================================================================
-  // RAYONS DE BORDURE
-  // ========================================================================
-
-  static const double radiusSmall = 8;
-  static const double radiusMedium = 12;
-  static const double radiusLarge = 16;
-  static const double radiusXLarge = 24;
-  static const double radiusRound = 999;
-
-  // ========================================================================
-  // OMBRES
-  // ========================================================================
-
-  static const List<BoxShadow> shadowSmall = [
-    BoxShadow(
-      color: Color(0x0F000000),
-      blurRadius: 4,
-      offset: Offset(0, 1),
-    ),
-  ];
-
-  static const List<BoxShadow> shadowMedium = [
-    BoxShadow(
-      color: Color(0x1A000000),
-      blurRadius: 8,
-      offset: Offset(0, 2),
-    ),
-  ];
-
-  static const List<BoxShadow> shadowLarge = [
-    BoxShadow(
-      color: Color(0x26000000),
-      blurRadius: 16,
-      offset: Offset(0, 4),
-    ),
-  ];
 }
+
+// ============================================================================
+// PALETTES DE COULEURS PERSONNALISÉES
+// ============================================================================
+
+class LightColors {
+  static const Color primary = AppTheme._lightPrimary;
+  static const Color secondary = AppTheme._lightSecondary;
+  static const Color accent = AppTheme._lightAccent;
+  static const Color danger = AppTheme._lightDanger;
+  static const Color neutral = AppTheme._lightNeutral;
+  static const Color text = AppTheme._lightText;
+  static const Color background = AppTheme._lightBackground;
+  static const Color surface = AppTheme._lightSurface;
+  static const Color success = AppTheme._lightSecondary;
+  static const Color warning = AppTheme._lightAccent;
+  static const Color error = AppTheme._lightDanger;
+  static const Color info = AppTheme._lightPrimary;
+  static const Color disabled = Color(0xFFD1D5DB);
+  static const Color border = Color(0xFFE5E7EB);
+  static const Color divider = Color(0xFFF3F4F6);
+}
+
+class DarkColors {
+  static const Color primary = AppTheme._darkPrimary;
+  static const Color secondary = AppTheme._darkSecondary;
+  static const Color accent = AppTheme._darkAccent;
+  static const Color danger = AppTheme._darkDanger;
+  static const Color neutral = AppTheme._darkNeutral;
+  static const Color text = AppTheme._darkText;
+  static const Color background = AppTheme._darkBackground;
+  static const Color surface = AppTheme._darkSurface;
+  static const Color success = AppTheme._darkSecondary;
+  static const Color warning = AppTheme._darkAccent;
+  static const Color error = AppTheme._darkDanger;
+  static const Color info = AppTheme._darkPrimary;
+  static const Color disabled = Color(0xFF4B5563);
+  static const Color border = Color(0xFF374151);
+  static const Color divider = Color(0xFF1F2937);
+}
+
+// ============================================================================
+// ESPACEMENTS
+// ============================================================================
+
+const double spacing2 = 2;
+const double spacing4 = 4;
+const double spacing8 = 8;
+const double spacing12 = 12;
+const double spacing16 = 16;
+const double spacing20 = 20;
+const double spacing24 = 24;
+const double spacing32 = 32;
+const double spacing40 = 40;
+const double spacing48 = 48;
+
+// ============================================================================
+// RAYONS DE BORDURE
+// ============================================================================
+
+const double radiusSmall = 8;
+const double radiusMedium = 12;
+const double radiusLarge = 16;
+const double radiusXLarge = 24;
+const double radiusRound = 999;
+
+// ============================================================================
+// OMBRES
+// ============================================================================
+
+const List<BoxShadow> shadowSmall = [
+  BoxShadow(
+    color: Color(0x0F000000),
+    blurRadius: 4,
+    offset: Offset(0, 1),
+  ),
+];
+
+const List<BoxShadow> shadowMedium = [
+  BoxShadow(
+    color: Color(0x1A000000),
+    blurRadius: 8,
+    offset: Offset(0, 2),
+  ),
+];
+
+const List<BoxShadow> shadowLarge = [
+  BoxShadow(
+    color: Color(0x26000000),
+    blurRadius: 16,
+    offset: Offset(0, 4),
+  ),
+];

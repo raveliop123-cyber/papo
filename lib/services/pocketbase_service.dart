@@ -56,15 +56,8 @@ class PocketBaseService extends ChangeNotifier {
 
   /// Configurer les intercepteurs
   void _setupInterceptors() {
-    _pb.beforeSend = (url, config) async {
-      // Ajouter les headers personnalisés si nécessaire
-      return config;
-    };
-
-    _pb.afterSend = (response, request) async {
-      // Gérer les erreurs de réponse
-      return response;
-    };
+    // Les intercepteurs ne sont pas disponibles dans cette version de PocketBase
+    // Les erreurs sont gérées via try-catch dans chaque méthode
   }
 
   // ========================================================================
