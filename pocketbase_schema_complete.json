@@ -1,0 +1,1689 @@
+{
+  "collections": [
+    {
+      "id": "_pb_users_auth_",
+      "name": "users",
+      "type": "auth",
+      "system": true,
+      "schema": [
+        {
+          "id": "users_name",
+          "name": "name",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 2,
+            "max": 100,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "users_avatar",
+          "name": "avatar",
+          "type": "file",
+          "required": false,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "maxSize": 5242880,
+            "mimeTypes": [
+              "image/jpeg",
+              "image/png",
+              "image/svg+xml",
+              "image/gif",
+              "image/webp"
+            ],
+            "thumbs": ["100x100"]
+          }
+        },
+        {
+          "id": "users_phone",
+          "name": "phone",
+          "type": "text",
+          "required": true,
+          "unique": true,
+          "presentable": true,
+          "options": {
+            "min": 8,
+            "max": 15,
+            "pattern": "^\\+[1-9]\\d{1,14}$|^\\d{8,15}$"
+          }
+        },
+        {
+          "id": "users_pin",
+          "name": "pin",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "options": {
+            "min": 4,
+            "max": 6,
+            "pattern": "^\\d{4,6}$"
+          }
+        },
+        {
+          "id": "users_email",
+          "name": "email",
+          "type": "text",
+          "required": false,
+          "unique": true,
+          "presentable": true,
+          "options": {
+            "min": 5,
+            "max": 255,
+            "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$"
+          }
+        },
+        {
+          "id": "users_date_of_birth",
+          "name": "date_of_birth",
+          "type": "date",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "users_is_verified",
+          "name": "is_verified",
+          "type": "bool",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "users_kyc_level",
+          "name": "kyc_level",
+          "type": "number",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 0,
+            "max": 3
+          }
+        },
+        {
+          "id": "users_user_type",
+          "name": "user_type",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "options": {
+            "maxSelect": 1,
+            "values": ["individual", "merchant", "admin", "support"]
+          }
+        },
+        {
+          "id": "users_is_active",
+          "name": "is_active",
+          "type": "bool",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "users_biometric_enabled",
+          "name": "biometric_enabled",
+          "type": "bool",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "users_theme_preference",
+          "name": "theme_preference",
+          "type": "select",
+          "required": false,
+          "unique": false,
+          "options": {
+            "maxSelect": 1,
+            "values": ["light", "dark", "system"]
+          }
+        },
+        {
+          "id": "users_language",
+          "name": "language",
+          "type": "select",
+          "required": false,
+          "unique": false,
+          "options": {
+            "maxSelect": 1,
+            "values": ["fr", "en", "es", "pt"]
+          }
+        },
+        {
+          "id": "users_country",
+          "name": "country",
+          "type": "text",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 2,
+            "max": 2,
+            "pattern": "^[A-Z]{2}$"
+          }
+        },
+        {
+          "id": "users_city",
+          "name": "city",
+          "type": "text",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 2,
+            "max": 100
+          }
+        },
+        {
+          "id": "users_notification_settings",
+          "name": "notification_settings",
+          "type": "json",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "users_last_login",
+          "name": "last_login",
+          "type": "date",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "users_account_status",
+          "name": "account_status",
+          "type": "select",
+          "required": false,
+          "unique": false,
+          "options": {
+            "maxSelect": 1,
+            "values": ["active", "suspended", "closed", "pending_verification"]
+          }
+        }
+      ],
+      "listRule": "id = @request.auth.id",
+      "viewRule": "id = @request.auth.id",
+      "createRule": "",
+      "updateRule": "id = @request.auth.id",
+      "deleteRule": "id = @request.auth.id",
+      "auth": {
+        "allowEmailAuth": false,
+        "allowOAuth2Auth": false,
+        "allowUsernameAuth": false,
+        "allowPhoneAuth": true,
+        "minPasswordLength": 4,
+        "onlyEmailDomains": [],
+        "onlyVerified": false,
+        "requireEmailVerification": false
+      }
+    },
+    {
+      "id": "col_papo_wallets",
+      "name": "papo_wallets",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "id": "fld_wallet_user_relation",
+          "name": "user",
+          "type": "relation",
+          "required": true,
+          "unique": true,
+          "presentable": true,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": true,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name", "phone"]
+          }
+        },
+        {
+          "id": "fld_wallet_balance",
+          "name": "balance",
+          "type": "number",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 0,
+            "max": null,
+            "positive": true
+          }
+        },
+        {
+          "id": "fld_wallet_currency",
+          "name": "currency",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 3,
+            "max": 3,
+            "pattern": "^[A-Z]{3}$"
+          }
+        },
+        {
+          "id": "fld_wallet_daily_limit",
+          "name": "daily_limit",
+          "type": "number",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 0,
+            "max": null,
+            "positive": true
+          }
+        },
+        {
+          "id": "fld_wallet_monthly_limit",
+          "name": "monthly_limit",
+          "type": "number",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 0,
+            "max": null,
+            "positive": true
+          }
+        },
+        {
+          "id": "fld_wallet_is_active",
+          "name": "is_active",
+          "type": "bool",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "fld_wallet_total_spent_today",
+          "name": "total_spent_today",
+          "type": "number",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 0,
+            "max": null,
+            "positive": true
+          }
+        },
+        {
+          "id": "fld_wallet_total_spent_month",
+          "name": "total_spent_month",
+          "type": "number",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 0,
+            "max": null,
+            "positive": true
+          }
+        }
+      ],
+      "listRule": "user = @request.auth.id",
+      "viewRule": "user = @request.auth.id",
+      "createRule": "user = @request.auth.id",
+      "updateRule": "user = @request.auth.id",
+      "deleteRule": ""
+    },
+    {
+      "id": "col_papo_transactions",
+      "name": "papo_transactions",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "id": "fld_transaction_sender",
+          "name": "sender",
+          "type": "relation",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": false,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name", "phone"]
+          }
+        },
+        {
+          "id": "fld_transaction_receiver",
+          "name": "receiver",
+          "type": "relation",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": false,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name", "phone"]
+          }
+        },
+        {
+          "id": "fld_transaction_amount",
+          "name": "amount",
+          "type": "number",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 0.01,
+            "max": null,
+            "positive": true
+          }
+        },
+        {
+          "id": "fld_transaction_currency",
+          "name": "currency",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 3,
+            "max": 3,
+            "pattern": "^[A-Z]{3}$"
+          }
+        },
+        {
+          "id": "fld_transaction_type",
+          "name": "type",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["deposit", "withdrawal", "transfer", "payment", "tontine_contribution", "tontine_distribution"]
+          }
+        },
+        {
+          "id": "fld_transaction_status",
+          "name": "status",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["pending", "completed", "failed", "cancelled", "reversed"]
+          }
+        },
+        {
+          "id": "fld_transaction_method",
+          "name": "method",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["online", "nfc", "qr", "bluetooth", "manual"]
+          }
+        },
+        {
+          "id": "fld_transaction_notes",
+          "name": "notes",
+          "type": "text",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": null,
+            "max": 500,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_transaction_reference",
+          "name": "reference",
+          "type": "text",
+          "required": false,
+          "unique": true,
+          "presentable": true,
+          "options": {
+            "min": 10,
+            "max": 50
+          }
+        },
+        {
+          "id": "fld_transaction_fee",
+          "name": "fee",
+          "type": "number",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 0,
+            "max": null,
+            "positive": true
+          }
+        },
+        {
+          "id": "fld_transaction_offline_sync",
+          "name": "offline_sync",
+          "type": "bool",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "fld_transaction_metadata",
+          "name": "metadata",
+          "type": "json",
+          "required": false,
+          "unique": false,
+          "options": {}
+        }
+      ],
+      "listRule": "sender = @request.auth.id || receiver = @request.auth.id",
+      "viewRule": "sender = @request.auth.id || receiver = @request.auth.id",
+      "createRule": "sender = @request.auth.id",
+      "updateRule": "",
+      "deleteRule": ""
+    },
+    {
+      "id": "col_papo_kyc",
+      "name": "papo_kyc",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "id": "fld_kyc_user_relation",
+          "name": "user",
+          "type": "relation",
+          "required": true,
+          "unique": true,
+          "presentable": true,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": true,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name", "phone"]
+          }
+        },
+        {
+          "id": "fld_kyc_level",
+          "name": "level",
+          "type": "number",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 1,
+            "max": 3
+          }
+        },
+        {
+          "id": "fld_kyc_document_type",
+          "name": "document_type",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["id_card", "passport", "driver_license", "proof_of_address"]
+          }
+        },
+        {
+          "id": "fld_kyc_document_number",
+          "name": "document_number",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 5,
+            "max": 50,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_kyc_document_file",
+          "name": "document_file",
+          "type": "file",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "maxSize": 10485760,
+            "mimeTypes": [
+              "image/jpeg",
+              "image/png",
+              "application/pdf"
+            ],
+            "thumbs": ["200x200"]
+          }
+        },
+        {
+          "id": "fld_kyc_selfie_file",
+          "name": "selfie_file",
+          "type": "file",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "maxSize": 5242880,
+            "mimeTypes": [
+              "image/jpeg",
+              "image/png"
+            ],
+            "thumbs": ["200x200"]
+          }
+        },
+        {
+          "id": "fld_kyc_address_file",
+          "name": "address_file",
+          "type": "file",
+          "required": false,
+          "unique": false,
+          "options": {
+            "maxSelect": 1,
+            "maxSize": 10485760,
+            "mimeTypes": [
+              "image/jpeg",
+              "image/png",
+              "application/pdf"
+            ],
+            "thumbs": ["200x200"]
+          }
+        },
+        {
+          "id": "fld_kyc_status",
+          "name": "status",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["pending", "approved", "rejected", "expired"]
+          }
+        },
+        {
+          "id": "fld_kyc_rejection_reason",
+          "name": "rejection_reason",
+          "type": "text",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": null,
+            "max": 500,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_kyc_verified_by",
+          "name": "verified_by",
+          "type": "relation",
+          "required": false,
+          "unique": false,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": false,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name"]
+          }
+        },
+        {
+          "id": "fld_kyc_verified_at",
+          "name": "verified_at",
+          "type": "date",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "fld_kyc_expires_at",
+          "name": "expires_at",
+          "type": "date",
+          "required": false,
+          "unique": false,
+          "options": {}
+        }
+      ],
+      "listRule": "user = @request.auth.id || @request.auth.role = 'admin'",
+      "viewRule": "user = @request.auth.id || @request.auth.role = 'admin'",
+      "createRule": "user = @request.auth.id",
+      "updateRule": "@request.auth.role = 'admin'",
+      "deleteRule": ""
+    },
+    {
+      "id": "col_papo_tontines",
+      "name": "papo_tontines",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "id": "fld_tontine_name",
+          "name": "name",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 3,
+            "max": 100,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_tontine_description",
+          "name": "description",
+          "type": "text",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": null,
+            "max": 500,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_tontine_creator",
+          "name": "creator",
+          "type": "relation",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": false,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name", "phone"]
+          }
+        },
+        {
+          "id": "fld_tontine_members",
+          "name": "members",
+          "type": "relation",
+          "required": false,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": false,
+            "minSelect": null,
+            "maxSelect": 20,
+            "displayFields": ["name", "phone"]
+          }
+        },
+        {
+          "id": "fld_tontine_contribution_amount",
+          "name": "contribution_amount",
+          "type": "number",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 1000,
+            "max": null,
+            "positive": true
+          }
+        },
+        {
+          "id": "fld_tontine_frequency",
+          "name": "frequency",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["daily", "weekly", "biweekly", "monthly"]
+          }
+        },
+        {
+          "id": "fld_tontine_type",
+          "name": "type",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["simple", "hierarchical", "mixed"]
+          }
+        },
+        {
+          "id": "fld_tontine_start_date",
+          "name": "start_date",
+          "type": "date",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {}
+        },
+        {
+          "id": "fld_tontine_end_date",
+          "name": "end_date",
+          "type": "date",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {}
+        },
+        {
+          "id": "fld_tontine_status",
+          "name": "status",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["recruiting", "active", "paused", "completed", "cancelled"]
+          }
+        },
+        {
+          "id": "fld_tontine_total_collected",
+          "name": "total_collected",
+          "type": "number",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 0,
+            "max": null,
+            "positive": true
+          }
+        },
+        {
+          "id": "fld_tontine_distribution_order",
+          "name": "distribution_order",
+          "type": "json",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "fld_tontine_current_round",
+          "name": "current_round",
+          "type": "number",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 0,
+            "max": null
+          }
+        }
+      ],
+      "listRule": "creator = @request.auth.id || @request.auth.id in members",
+      "viewRule": "creator = @request.auth.id || @request.auth.id in members",
+      "createRule": "@request.auth.id != ''",
+      "updateRule": "creator = @request.auth.id",
+      "deleteRule": "creator = @request.auth.id"
+    },
+    {
+      "id": "col_papo_tontine_contributions",
+      "name": "papo_tontine_contributions",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "id": "fld_contribution_tontine",
+          "name": "tontine",
+          "type": "relation",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "collectionId": "col_papo_tontines",
+            "cascadeDelete": true,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name"]
+          }
+        },
+        {
+          "id": "fld_contribution_member",
+          "name": "member",
+          "type": "relation",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": false,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name", "phone"]
+          }
+        },
+        {
+          "id": "fld_contribution_amount",
+          "name": "amount",
+          "type": "number",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 0.01,
+            "max": null,
+            "positive": true
+          }
+        },
+        {
+          "id": "fld_contribution_round",
+          "name": "round",
+          "type": "number",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 1,
+            "max": null
+          }
+        },
+        {
+          "id": "fld_contribution_status",
+          "name": "status",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["pending", "paid", "overdue", "cancelled"]
+          }
+        },
+        {
+          "id": "fld_contribution_due_date",
+          "name": "due_date",
+          "type": "date",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {}
+        },
+        {
+          "id": "fld_contribution_paid_date",
+          "name": "paid_date",
+          "type": "date",
+          "required": false,
+          "unique": false,
+          "options": {}
+        }
+      ],
+      "listRule": "@request.auth.id != ''",
+      "viewRule": "@request.auth.id != ''",
+      "createRule": "@request.auth.id != ''",
+      "updateRule": "@request.auth.role = 'admin'",
+      "deleteRule": ""
+    },
+    {
+      "id": "col_papo_notifications",
+      "name": "papo_notifications",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "id": "fld_notification_user",
+          "name": "user",
+          "type": "relation",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": true,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name", "phone"]
+          }
+        },
+        {
+          "id": "fld_notification_type",
+          "name": "type",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["transaction", "tontine", "kyc", "support", "security", "ecosystem", "promotion"]
+          }
+        },
+        {
+          "id": "fld_notification_title",
+          "name": "title",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 5,
+            "max": 100,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_notification_body",
+          "name": "body",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "options": {
+            "min": 10,
+            "max": 500,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_notification_data",
+          "name": "data",
+          "type": "json",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "fld_notification_is_read",
+          "name": "is_read",
+          "type": "bool",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "fld_notification_read_at",
+          "name": "read_at",
+          "type": "date",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "fld_notification_priority",
+          "name": "priority",
+          "type": "select",
+          "required": false,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["low", "medium", "high", "critical"]
+          }
+        }
+      ],
+      "listRule": "user = @request.auth.id",
+      "viewRule": "user = @request.auth.id",
+      "createRule": "@request.auth.role = 'admin'",
+      "updateRule": "user = @request.auth.id",
+      "deleteRule": "user = @request.auth.id"
+    },
+    {
+      "id": "col_papo_tickets",
+      "name": "papo_tickets",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "id": "fld_ticket_user",
+          "name": "user",
+          "type": "relation",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": false,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name", "phone"]
+          }
+        },
+        {
+          "id": "fld_ticket_category",
+          "name": "category",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["transaction", "account", "security", "technical", "other"]
+          }
+        },
+        {
+          "id": "fld_ticket_subject",
+          "name": "subject",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 5,
+            "max": 200,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_ticket_description",
+          "name": "description",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "options": {
+            "min": 20,
+            "max": 2000,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_ticket_status",
+          "name": "status",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["open", "in_progress", "waiting_user", "resolved", "closed"]
+          }
+        },
+        {
+          "id": "fld_ticket_priority",
+          "name": "priority",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["low", "medium", "high", "critical"]
+          }
+        },
+        {
+          "id": "fld_ticket_assigned_to",
+          "name": "assigned_to",
+          "type": "relation",
+          "required": false,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": false,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name"]
+          }
+        },
+        {
+          "id": "fld_ticket_resolution_time",
+          "name": "resolution_time",
+          "type": "number",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 0,
+            "max": null
+          }
+        },
+        {
+          "id": "fld_ticket_rating",
+          "name": "rating",
+          "type": "number",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 1,
+            "max": 5
+          }
+        },
+        {
+          "id": "fld_ticket_resolved_at",
+          "name": "resolved_at",
+          "type": "date",
+          "required": false,
+          "unique": false,
+          "options": {}
+        }
+      ],
+      "listRule": "user = @request.auth.id || @request.auth.role = 'support' || @request.auth.role = 'admin'",
+      "viewRule": "user = @request.auth.id || @request.auth.role = 'support' || @request.auth.role = 'admin'",
+      "createRule": "@request.auth.id != ''",
+      "updateRule": "user = @request.auth.id || @request.auth.role = 'support' || @request.auth.role = 'admin'",
+      "deleteRule": ""
+    },
+    {
+      "id": "col_papo_ticket_messages",
+      "name": "papo_ticket_messages",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "id": "fld_message_ticket",
+          "name": "ticket",
+          "type": "relation",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "collectionId": "col_papo_tickets",
+            "cascadeDelete": true,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["subject"]
+          }
+        },
+        {
+          "id": "fld_message_sender",
+          "name": "sender",
+          "type": "relation",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": false,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name"]
+          }
+        },
+        {
+          "id": "fld_message_content",
+          "name": "content",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 1,
+            "max": 2000,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_message_attachments",
+          "name": "attachments",
+          "type": "file",
+          "required": false,
+          "unique": false,
+          "options": {
+            "maxSelect": 5,
+            "maxSize": 10485760,
+            "mimeTypes": [
+              "image/jpeg",
+              "image/png",
+              "application/pdf",
+              "text/plain"
+            ],
+            "thumbs": []
+          }
+        },
+        {
+          "id": "fld_message_is_read",
+          "name": "is_read",
+          "type": "bool",
+          "required": false,
+          "unique": false,
+          "options": {}
+        }
+      ],
+      "listRule": "@request.auth.id != ''",
+      "viewRule": "@request.auth.id != ''",
+      "createRule": "@request.auth.id != ''",
+      "updateRule": "sender = @request.auth.id",
+      "deleteRule": ""
+    },
+    {
+      "id": "col_papo_services",
+      "name": "papo_services",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "id": "fld_service_name",
+          "name": "name",
+          "type": "text",
+          "required": true,
+          "unique": true,
+          "presentable": true,
+          "options": {
+            "min": 3,
+            "max": 100,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_service_description",
+          "name": "description",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "options": {
+            "min": 20,
+            "max": 1000,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_service_icon",
+          "name": "icon",
+          "type": "file",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "maxSize": 2097152,
+            "mimeTypes": [
+              "image/jpeg",
+              "image/png",
+              "image/svg+xml",
+              "image/webp"
+            ],
+            "thumbs": ["100x100"]
+          }
+        },
+        {
+          "id": "fld_service_download_url",
+          "name": "download_url",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 10,
+            "max": 500,
+            "pattern": "^https?://"
+          }
+        },
+        {
+          "id": "fld_service_category",
+          "name": "category",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["payment", "investment", "insurance", "credit", "business", "other"]
+          }
+        },
+        {
+          "id": "fld_service_rating",
+          "name": "rating",
+          "type": "number",
+          "required": false,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 0,
+            "max": 5
+          }
+        },
+        {
+          "id": "fld_service_reviews_count",
+          "name": "reviews_count",
+          "type": "number",
+          "required": false,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 0,
+            "max": null
+          }
+        },
+        {
+          "id": "fld_service_is_active",
+          "name": "is_active",
+          "type": "bool",
+          "required": false,
+          "unique": false,
+          "presentable": true,
+          "options": {}
+        },
+        {
+          "id": "fld_service_order",
+          "name": "order",
+          "type": "number",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 0,
+            "max": null
+          }
+        }
+      ],
+      "listRule": "is_active = true",
+      "viewRule": "is_active = true",
+      "createRule": "@request.auth.role = 'admin'",
+      "updateRule": "@request.auth.role = 'admin'",
+      "deleteRule": "@request.auth.role = 'admin'"
+    },
+    {
+      "id": "col_papo_devices",
+      "name": "papo_devices",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "id": "fld_device_user",
+          "name": "user",
+          "type": "relation",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": true,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name", "phone"]
+          }
+        },
+        {
+          "id": "fld_device_device_id",
+          "name": "device_id",
+          "type": "text",
+          "required": true,
+          "unique": true,
+          "presentable": true,
+          "options": {
+            "min": 10,
+            "max": 255,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_device_device_name",
+          "name": "device_name",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 3,
+            "max": 100,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_device_os",
+          "name": "os",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["android", "ios", "web"]
+          }
+        },
+        {
+          "id": "fld_device_os_version",
+          "name": "os_version",
+          "type": "text",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 1,
+            "max": 50,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_device_app_version",
+          "name": "app_version",
+          "type": "text",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 1,
+            "max": 20,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_device_fcm_token",
+          "name": "fcm_token",
+          "type": "text",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 10,
+            "max": 500,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_device_is_active",
+          "name": "is_active",
+          "type": "bool",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "fld_device_last_seen",
+          "name": "last_seen",
+          "type": "date",
+          "required": false,
+          "unique": false,
+          "presentable": true,
+          "options": {}
+        }
+      ],
+      "listRule": "user = @request.auth.id",
+      "viewRule": "user = @request.auth.id",
+      "createRule": "user = @request.auth.id",
+      "updateRule": "user = @request.auth.id",
+      "deleteRule": "user = @request.auth.id"
+    },
+    {
+      "id": "col_papo_activity_logs",
+      "name": "papo_activity_logs",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "id": "fld_log_user",
+          "name": "user",
+          "type": "relation",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": false,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name", "phone"]
+          }
+        },
+        {
+          "id": "fld_log_action",
+          "name": "action",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["login", "logout", "transaction", "kyc_update", "profile_update", "security_change", "device_login"]
+          }
+        },
+        {
+          "id": "fld_log_description",
+          "name": "description",
+          "type": "text",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": null,
+            "max": 500,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_log_ip_address",
+          "name": "ip_address",
+          "type": "text",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 7,
+            "max": 45,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_log_device_info",
+          "name": "device_info",
+          "type": "json",
+          "required": false,
+          "unique": false,
+          "options": {}
+        },
+        {
+          "id": "fld_log_status",
+          "name": "status",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "options": {
+            "maxSelect": 1,
+            "values": ["success", "failed", "warning"]
+          }
+        }
+      ],
+      "listRule": "user = @request.auth.id || @request.auth.role = 'admin'",
+      "viewRule": "user = @request.auth.id || @request.auth.role = 'admin'",
+      "createRule": "@request.auth.id != ''",
+      "updateRule": "",
+      "deleteRule": "@request.auth.role = 'admin'"
+    },
+    {
+      "id": "col_papo_merchants",
+      "name": "papo_merchants",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "id": "fld_merchant_user",
+          "name": "user",
+          "type": "relation",
+          "required": true,
+          "unique": true,
+          "presentable": true,
+          "options": {
+            "collectionId": "_pb_users_auth_",
+            "cascadeDelete": true,
+            "minSelect": null,
+            "maxSelect": 1,
+            "displayFields": ["name", "phone"]
+          }
+        },
+        {
+          "id": "fld_merchant_business_name",
+          "name": "business_name",
+          "type": "text",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "min": 3,
+            "max": 100,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_merchant_business_category",
+          "name": "business_category",
+          "type": "select",
+          "required": true,
+          "unique": false,
+          "presentable": true,
+          "options": {
+            "maxSelect": 1,
+            "values": ["retail", "restaurant", "services", "online", "other"]
+          }
+        },
+        {
+          "id": "fld_merchant_merchant_code",
+          "name": "merchant_code",
+          "type": "text",
+          "required": true,
+          "unique": true,
+          "presentable": true,
+          "options": {
+            "min": 6,
+            "max": 20,
+            "pattern": "^[A-Z0-9]+$"
+          }
+        },
+        {
+          "id": "fld_merchant_qr_code",
+          "name": "qr_code",
+          "type": "text",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": null,
+            "max": 500,
+            "pattern": ""
+          }
+        },
+        {
+          "id": "fld_merchant_commission_rate",
+          "name": "commission_rate",
+          "type": "number",
+          "required": true,
+          "unique": false,
+          "options": {
+            "min": 0,
+            "max": 10
+          }
+        },
+        {
+          "id": "fld_merchant_total_sales",
+          "name": "total_sales",
+          "type": "number",
+          "required": false,
+          "unique": false,
+          "options": {
+            "min": 0,
+            "max": null,
+            "positive": true
+          }
+        },
+        {
+          "id": "fld_merchant_is_verified",
+          "name": "is_verified",
+          "type": "bool",
+          "required": false,
+          "unique": false,
+          "presentable": true,
+          "options": {}
+        },
+        {
+          "id": "fld_merchant_is_active",
+          "name": "is_active",
+          "type": "bool",
+          "required": false,
+          "unique": false,
+          "presentable": true,
+          "options": {}
+        }
+      ],
+      "listRule": "user = @request.auth.id || @request.auth.role = 'admin'",
+      "viewRule": "user = @request.auth.id || @request.auth.role = 'admin'",
+      "createRule": "@request.auth.user_type = 'merchant'",
+      "updateRule": "user = @request.auth.id || @request.auth.role = 'admin'",
+      "deleteRule": "@request.auth.role = 'admin'"
+    }
+  ]
+}
