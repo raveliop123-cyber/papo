@@ -4,6 +4,7 @@ import '../services/pocketbase_service.dart';
 import '../models/models.dart';
 import '../theme.dart';
 import 'package:intl/intl.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -92,59 +93,90 @@ class HomeScreen extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             gradient: isDark ? AppTheme.savannaNight : AppTheme.africanSunset,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(28),
             boxShadow: [
               BoxShadow(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 24,
+                offset: const Offset(0, 12),
               ),
             ],
           ),
-          child: Stack(
-            children: [
-              Positioned(
-                right: -50,
-                top: -50,
-                child: CircleAvatar(
-                  radius: 100,
-                  backgroundColor: Colors.white.withOpacity(0.1),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Solde Total',
-                          style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        const Icon(Icons.blur_on_rounded, color: Colors.white70, size: 30),
-                      ],
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(28),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: -20,
+                  right: -20,
+                  child: Container(
+                    width: 150,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withOpacity(0.05),
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      '${NumberFormat.currency(symbol: '').format(balance)} $currency',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 28.0, vertical: 36.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'SOLDE ACTUEL',
+                            style: GoogleFonts.poppins(
+                              color: Colors.white.withOpacity(0.8),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 1.5,
+                            ),
+                          ),
+                          Icon(Icons.waves_rounded, color: Colors.white.withOpacity(0.5)),
+                        ],
                       ),
-                    ),
-                    const SizedBox(height: 32),
-                    const Text(
-                      '**** **** **** 8892',
-                      style: TextStyle(color: Colors.white70, fontSize: 18, letterSpacing: 4),
-                    ),
-                  ],
+                      const SizedBox(height: 8),
+                      Text(
+                        '${NumberFormat.currency(symbol: '').format(balance)} $currency',
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontSize: 34,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '**** **** **** 8892',
+                            style: GoogleFonts.sourceCodePro(
+                              color: Colors.white.withOpacity(0.9),
+                              fontSize: 16,
+                              letterSpacing: 2,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Text(
+                              'PAPO VIP',
+                              style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -152,12 +184,8 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildQuickActions(BuildContext context) {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 4,
-      mainAxisSpacing: 16,
-      crossAxisSpacing: 16,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _actionItem(context, Icons.contactless_rounded, 'NFC', Colors.blue, 'nfc'),
         _actionItem(context, Icons.qr_code_2_rounded, 'QR Pay', Colors.orange, 'qr'),
@@ -173,25 +201,27 @@ class HomeScreen extends StatelessWidget {
         InkWell(
           onTap: () {
             if (route == 'admin') {
-               Navigator.pushNamed(context, '/admin');
+              Navigator.pushNamed(context, '/admin');
             } else {
-               Navigator.pushNamed(context, '/payment', arguments: route);
+              Navigator.pushNamed(context, '/payment', arguments: route);
             }
           },
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(24),
           child: Container(
-            padding: const EdgeInsets.all(16),
+            width: 64,
+            height: 64,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(20),
+              color: Theme.of(context).cardTheme.color,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: color.withOpacity(0.2)),
             ),
             child: Icon(icon, color: color, size: 28),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 10),
         Text(
           label,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+          style: GoogleFonts.poppins(fontSize: 11, fontWeight: FontWeight.w500, color: Colors.grey.shade600),
           textAlign: TextAlign.center,
         ),
       ],
@@ -217,35 +247,28 @@ class HomeScreen extends StatelessWidget {
           );
         }
 
-        return ListView.builder(
+        return ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: txs.length,
+          separatorBuilder: (context, index) => Divider(color: Colors.grey.withOpacity(0.05), height: 1),
           itemBuilder: (context, index) {
             final tx = txs[index];
             final isDeposit = tx.type == 'deposit';
             return Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardTheme.color ?? Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4)),
-                ],
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 16),
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: (isDeposit ? Colors.green : Colors.red).withOpacity(0.1),
-                      shape: BoxShape.circle,
+                      color: (isDeposit ? Colors.green : Colors.orange).withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(14),
                     ),
                     child: Icon(
-                      isDeposit ? Icons.arrow_downward_rounded : Icons.arrow_upward_rounded,
-                      color: isDeposit ? Colors.green : Colors.red,
-                      size: 20,
+                      isDeposit ? Icons.add_rounded : Icons.remove_rounded,
+                      color: isDeposit ? Colors.green : Colors.orange,
+                      size: 24,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -254,22 +277,22 @@ class HomeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          tx.type.toUpperCase(),
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          tx.type == 'deposit' ? 'Dépôt Reçu' : 'Paiement Effectué',
+                          style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 15),
                         ),
                         Text(
                           DateFormat.yMMMd().format(tx.created),
-                          style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
+                          style: GoogleFonts.poppins(color: Colors.grey.shade400, fontSize: 12),
                         ),
                       ],
                     ),
                   ),
                   Text(
                     '${isDeposit ? '+' : '-'}${tx.amount} ${tx.currency}',
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: isDeposit ? Colors.green : Colors.red,
+                      fontSize: 15,
+                      color: isDeposit ? Colors.green : Colors.black87,
                     ),
                   ),
                 ],
