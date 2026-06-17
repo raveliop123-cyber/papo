@@ -7,9 +7,10 @@
             "system": true,
             "schema": [
                 {
-                    "id": "users_name",
+                    "id": "u_name_field_001",
                     "name": "name",
                     "type": "text",
+                    "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
@@ -19,9 +20,10 @@
                     }
                 },
                 {
-                    "id": "users_avatar",
+                    "id": "u_avatar_field_002",
                     "name": "avatar",
                     "type": "file",
+                    "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
@@ -38,9 +40,10 @@
                     }
                 },
                 {
-                    "id": "users_phone",
+                    "id": "u_phone_field_003",
                     "name": "phone",
                     "type": "text",
+                    "system": false,
                     "required": true,
                     "unique": true,
                     "options": {
@@ -50,9 +53,10 @@
                     }
                 },
                 {
-                    "id": "users_pin",
+                    "id": "u_pin_field_004",
                     "name": "pin",
                     "type": "text",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -62,17 +66,19 @@
                     }
                 },
                 {
-                    "id": "users_is_verified",
+                    "id": "u_verified_field_005",
                     "name": "is_verified",
                     "type": "bool",
+                    "system": false,
                     "required": false,
                     "unique": false,
                     "options": {}
                 },
                 {
-                    "id": "users_theme",
+                    "id": "u_theme_field_006",
                     "name": "theme_preference",
                     "type": "select",
+                    "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
@@ -85,9 +91,10 @@
                     }
                 },
                 {
-                    "id": "users_nfc",
+                    "id": "u_nfc_field_007",
                     "name": "nfc_enabled",
                     "type": "bool",
+                    "system": false,
                     "required": false,
                     "unique": false,
                     "options": {}
@@ -110,15 +117,16 @@
             }
         },
         {
-            "id": "col_papo_wallets",
+            "id": "col_papo_wallets_001",
             "name": "papo_wallets",
             "type": "base",
             "system": false,
             "schema": [
                 {
-                    "id": "fld_wallet_user_relation",
+                    "id": "w_user_rel_field_001",
                     "name": "user",
                     "type": "relation",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -130,9 +138,10 @@
                     }
                 },
                 {
-                    "id": "fld_wallet_balance",
+                    "id": "w_balance_field_002",
                     "name": "balance",
                     "type": "number",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -142,9 +151,10 @@
                     }
                 },
                 {
-                    "id": "fld_wallet_currency",
+                    "id": "w_currency_field_003",
                     "name": "currency",
                     "type": "text",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -161,15 +171,16 @@
             "deleteRule": "user = @request.auth.id"
         },
         {
-            "id": "col_papo_transactions",
+            "id": "col_papo_transactions_001",
             "name": "papo_transactions",
             "type": "base",
             "system": false,
             "schema": [
                 {
-                    "id": "fld_transaction_sender",
+                    "id": "t_sender_rel_field_001",
                     "name": "sender",
                     "type": "relation",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -181,9 +192,10 @@
                     }
                 },
                 {
-                    "id": "fld_transaction_receiver",
+                    "id": "t_receiver_rel_field_002",
                     "name": "receiver",
                     "type": "relation",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -195,9 +207,10 @@
                     }
                 },
                 {
-                    "id": "fld_transaction_amount",
+                    "id": "t_amount_field_003",
                     "name": "amount",
                     "type": "number",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -207,9 +220,10 @@
                     }
                 },
                 {
-                    "id": "fld_transaction_currency",
+                    "id": "t_currency_field_004",
                     "name": "currency",
                     "type": "text",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -219,9 +233,10 @@
                     }
                 },
                 {
-                    "id": "fld_transaction_type",
+                    "id": "t_type_field_005",
                     "name": "type",
                     "type": "select",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -234,9 +249,10 @@
                     }
                 },
                 {
-                    "id": "fld_transaction_status",
+                    "id": "t_status_field_006",
                     "name": "status",
                     "type": "select",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -249,9 +265,10 @@
                     }
                 },
                 {
-                    "id": "fld_transaction_method",
+                    "id": "t_method_field_007",
                     "name": "method",
                     "type": "select",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -265,9 +282,10 @@
                     }
                 },
                 {
-                    "id": "fld_transaction_notes",
+                    "id": "t_notes_field_008",
                     "name": "notes",
                     "type": "text",
+                    "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
@@ -284,15 +302,16 @@
             "deleteRule": ""
         },
         {
-            "id": "col_papo_kyc",
+            "id": "col_papo_kyc_001",
             "name": "papo_kyc",
             "type": "base",
             "system": false,
             "schema": [
                 {
-                    "id": "fld_kyc_user_relation",
+                    "id": "k_user_rel_field_001",
                     "name": "user",
                     "type": "relation",
+                    "system": false,
                     "required": true,
                     "unique": true,
                     "options": {
@@ -304,9 +323,10 @@
                     }
                 },
                 {
-                    "id": "fld_kyc_document_type",
+                    "id": "k_doctype_field_002",
                     "name": "document_type",
                     "type": "select",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -319,9 +339,10 @@
                     }
                 },
                 {
-                    "id": "fld_kyc_document_number",
+                    "id": "k_docnum_field_003",
                     "name": "document_number",
                     "type": "text",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -331,9 +352,10 @@
                     }
                 },
                 {
-                    "id": "fld_kyc_document_file",
+                    "id": "k_docfile_field_004",
                     "name": "document_file",
                     "type": "file",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -348,9 +370,10 @@
                     }
                 },
                 {
-                    "id": "fld_kyc_status",
+                    "id": "k_status_field_005",
                     "name": "status",
                     "type": "select",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -363,9 +386,10 @@
                     }
                 },
                 {
-                    "id": "fld_kyc_rejection_reason",
+                    "id": "k_reason_field_006",
                     "name": "rejection_reason",
                     "type": "text",
+                    "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
@@ -382,15 +406,16 @@
             "deleteRule": ""
         },
         {
-            "id": "col_papo_tontines",
+            "id": "col_papo_tontines_001",
             "name": "papo_tontines",
             "type": "base",
             "system": false,
             "schema": [
                 {
-                    "id": "fld_tontine_name",
+                    "id": "tn_name_field_001",
                     "name": "name",
                     "type": "text",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -400,9 +425,10 @@
                     }
                 },
                 {
-                    "id": "fld_tontine_description",
+                    "id": "tn_desc_field_002",
                     "name": "description",
                     "type": "text",
+                    "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
@@ -412,9 +438,10 @@
                     }
                 },
                 {
-                    "id": "fld_tontine_amount",
+                    "id": "tn_amount_field_003",
                     "name": "contribution_amount",
                     "type": "number",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -424,9 +451,10 @@
                     }
                 },
                 {
-                    "id": "fld_tontine_frequency",
+                    "id": "tn_freq_field_004",
                     "name": "frequency",
                     "type": "select",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -439,9 +467,10 @@
                     }
                 },
                 {
-                    "id": "fld_tontine_creator",
+                    "id": "tn_creator_rel_field_005",
                     "name": "creator",
                     "type": "relation",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -453,9 +482,10 @@
                     }
                 },
                 {
-                    "id": "fld_tontine_status",
+                    "id": "tn_status_field_006",
                     "name": "status",
                     "type": "select",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -475,19 +505,20 @@
             "deleteRule": "creator = @request.auth.id"
         },
         {
-            "id": "col_papo_tontine_members",
+            "id": "col_papo_tm_001",
             "name": "papo_tontine_members",
             "type": "base",
             "system": false,
             "schema": [
                 {
-                    "id": "fld_tm_tontine",
+                    "id": "tm_tn_rel_field_001",
                     "name": "tontine",
                     "type": "relation",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
-                        "collectionId": "col_papo_tontines",
+                        "collectionId": "col_papo_tontines_001",
                         "cascadeDelete": true,
                         "minSelect": null,
                         "maxSelect": 1,
@@ -495,9 +526,10 @@
                     }
                 },
                 {
-                    "id": "fld_tm_user",
+                    "id": "tm_user_rel_field_002",
                     "name": "user",
                     "type": "relation",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -509,9 +541,10 @@
                     }
                 },
                 {
-                    "id": "fld_tm_role",
+                    "id": "tm_role_field_003",
                     "name": "role",
                     "type": "select",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -523,9 +556,10 @@
                     }
                 },
                 {
-                    "id": "fld_tm_status",
+                    "id": "tm_status_field_004",
                     "name": "status",
                     "type": "select",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -538,9 +572,10 @@
                     }
                 },
                 {
-                    "id": "fld_tm_rank",
+                    "id": "tm_rank_field_005",
                     "name": "rank",
                     "type": "number",
+                    "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
@@ -557,19 +592,20 @@
             "deleteRule": "tontine.creator = @request.auth.id"
         },
         {
-            "id": "col_papo_tontine_contributions",
+            "id": "col_papo_tc_001",
             "name": "papo_tontine_contributions",
             "type": "base",
             "system": false,
             "schema": [
                 {
-                    "id": "fld_tc_tontine",
+                    "id": "tc_tn_rel_field_001",
                     "name": "tontine",
                     "type": "relation",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
-                        "collectionId": "col_papo_tontines",
+                        "collectionId": "col_papo_tontines_001",
                         "cascadeDelete": true,
                         "minSelect": null,
                         "maxSelect": 1,
@@ -577,13 +613,14 @@
                     }
                 },
                 {
-                    "id": "fld_tc_member",
+                    "id": "tc_tm_rel_field_002",
                     "name": "member",
                     "type": "relation",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
-                        "collectionId": "col_papo_tontine_members",
+                        "collectionId": "col_papo_tm_001",
                         "cascadeDelete": true,
                         "minSelect": null,
                         "maxSelect": 1,
@@ -591,9 +628,10 @@
                     }
                 },
                 {
-                    "id": "fld_tc_amount",
+                    "id": "tc_amount_field_003",
                     "name": "amount",
                     "type": "number",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -603,9 +641,10 @@
                     }
                 },
                 {
-                    "id": "fld_tc_status",
+                    "id": "tc_status_field_004",
                     "name": "status",
                     "type": "select",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -625,15 +664,16 @@
             "deleteRule": "tontine.creator = @request.auth.id"
         },
         {
-            "id": "col_papo_support_tickets",
+            "id": "col_papo_st_001",
             "name": "papo_support_tickets",
             "type": "base",
             "system": false,
             "schema": [
                 {
-                    "id": "fld_st_user",
+                    "id": "st_user_rel_field_001",
                     "name": "user",
                     "type": "relation",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -645,9 +685,10 @@
                     }
                 },
                 {
-                    "id": "fld_st_subject",
+                    "id": "st_subject_field_002",
                     "name": "subject",
                     "type": "text",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -657,9 +698,10 @@
                     }
                 },
                 {
-                    "id": "fld_st_status",
+                    "id": "st_status_field_003",
                     "name": "status",
                     "type": "select",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -672,9 +714,10 @@
                     }
                 },
                 {
-                    "id": "fld_st_priority",
+                    "id": "st_priority_field_004",
                     "name": "priority",
                     "type": "select",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -694,19 +737,20 @@
             "deleteRule": ""
         },
         {
-            "id": "col_papo_support_messages",
+            "id": "col_papo_sm_001",
             "name": "papo_support_messages",
             "type": "base",
             "system": false,
             "schema": [
                 {
-                    "id": "fld_sm_ticket",
+                    "id": "sm_ticket_rel_field_001",
                     "name": "ticket",
                     "type": "relation",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
-                        "collectionId": "col_papo_support_tickets",
+                        "collectionId": "col_papo_st_001",
                         "cascadeDelete": true,
                         "minSelect": null,
                         "maxSelect": 1,
@@ -714,9 +758,10 @@
                     }
                 },
                 {
-                    "id": "fld_sm_sender",
+                    "id": "sm_sender_rel_field_002",
                     "name": "sender",
                     "type": "relation",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -728,9 +773,10 @@
                     }
                 },
                 {
-                    "id": "fld_sm_content",
+                    "id": "sm_content_field_003",
                     "name": "content",
                     "type": "text",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -740,9 +786,10 @@
                     }
                 },
                 {
-                    "id": "fld_sm_file",
+                    "id": "sm_file_field_004",
                     "name": "attachment",
                     "type": "file",
+                    "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
@@ -760,15 +807,16 @@
             "deleteRule": ""
         },
         {
-            "id": "col_papo_notifications",
+            "id": "col_papo_notif_001",
             "name": "papo_notifications",
             "type": "base",
             "system": false,
             "schema": [
                 {
-                    "id": "fld_notif_user",
+                    "id": "nt_user_rel_field_001",
                     "name": "user",
                     "type": "relation",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -780,9 +828,10 @@
                     }
                 },
                 {
-                    "id": "fld_notif_title",
+                    "id": "nt_title_field_002",
                     "name": "title",
                     "type": "text",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -792,9 +841,10 @@
                     }
                 },
                 {
-                    "id": "fld_notif_message",
+                    "id": "nt_msg_field_003",
                     "name": "message",
                     "type": "text",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -804,17 +854,19 @@
                     }
                 },
                 {
-                    "id": "fld_notif_read",
+                    "id": "nt_read_field_004",
                     "name": "is_read",
                     "type": "bool",
+                    "system": false,
                     "required": false,
                     "unique": false,
                     "options": {}
                 },
                 {
-                    "id": "fld_notif_type",
+                    "id": "nt_type_field_005",
                     "name": "type",
                     "type": "select",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
@@ -835,15 +887,16 @@
             "deleteRule": "user = @request.auth.id"
         },
         {
-            "id": "col_papo_ecosystem",
+            "id": "col_papo_eco_001",
             "name": "papo_ecosystem",
             "type": "base",
             "system": false,
             "schema": [
                 {
-                    "id": "fld_eco_name",
+                    "id": "ec_name_field_001",
                     "name": "name",
                     "type": "text",
+                    "system": false,
                     "required": true,
                     "unique": true,
                     "options": {
@@ -853,9 +906,10 @@
                     }
                 },
                 {
-                    "id": "fld_eco_desc",
+                    "id": "ec_desc_field_002",
                     "name": "description",
                     "type": "text",
+                    "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
@@ -865,20 +919,23 @@
                     }
                 },
                 {
-                    "id": "fld_eco_url",
+                    "id": "ec_url_field_003",
                     "name": "url",
-                    "type": "url",
+                    "type": "text",
+                    "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
-                        "exceptDomains": [],
-                        "onlyDomains": []
+                        "min": null,
+                        "max": null,
+                        "pattern": ""
                     }
                 },
                 {
-                    "id": "fld_eco_icon",
+                    "id": "ec_icon_field_004",
                     "name": "icon",
                     "type": "file",
+                    "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
@@ -893,8 +950,8 @@
                     }
                 }
             ],
-            "listRule": "",
-            "viewRule": "",
+            "listRule": "@request.auth.id != \"\"",
+            "viewRule": "@request.auth.id != \"\"",
             "createRule": "",
             "updateRule": "",
             "deleteRule": ""

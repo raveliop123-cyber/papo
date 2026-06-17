@@ -1,0 +1,81 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The Python ZigZag plugin
+.ziggy/
+
+# Xcode-related
+**/ios/Flutter/Flutter.appframework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.[mh]
+**/ios/Runner/GeneratedPluginRegistrant.swift
+**/ios/Runner/Assets.xcassets/AppIcon.appiconset/*.png
+**/macos/Flutter/ephemeral/
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/Runner/GeneratedPluginRegistrant.swift
+
+# Android-related
+**/android/local.properties
+**/android/app/src/main/java/io/flutter/plugins/
+**/android/app/src/main/kotlin/io/flutter/plugins/
+**/android/gen/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/bin/
+**/android/build/
+**/android/.gradle/
+**/android/app/build/
+**/android/app/src/main/res/mipmap-*/
+**/android/app/src/main/res/drawable-*/
+**/android/app/src/main/res/values/styles.xml
+
+# Flutter/Dart-related
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/.pub-cache/
+**/.pub/
+**/pubspec.lock
+
+# Web-related
+**/web/index.html
+**/web/manifest.json
+**/web/favicon.png
+**/web/icons/
+
+# Windows-related
+**/windows/flutter/ephemeral/
+**/windows/flutter/generated_plugin_registrant.h
+**/windows/flutter/generated_plugin_registrant.cc
+**/windows/runner/GeneratedPluginRegistrant.h
+**/windows/runner/GeneratedPluginRegistrant.cc
+
+# Linux-related
+**/linux/flutter/ephemeral/
+**/linux/flutter/generated_plugin_registrant.h
+**/linux/flutter/generated_plugin_registrant.cc
+
+# Build artifacts
+build/
+bin/
+obj/
