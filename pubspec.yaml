@@ -30,8 +30,8 @@ dependencies:
   flutter_secure_storage: ^9.2.0
   
   # Paiements Offline
-  nfc_manager: ^3.4.0
-  mobile_scanner: ^5.0.0
+  nfc_manager: ^4.2.1
+  mobile_scanner: ^7.2.0
   flutter_blue_plus: ^1.32.0
   
   # Notifications
