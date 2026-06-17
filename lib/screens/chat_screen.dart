@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pocketbase/pocketbase.dart';
 import '../services/pocketbase_service.dart';
-import '../models/models.dart';
 
 class ChatScreen extends StatefulWidget {
   final String ticketId;
@@ -14,6 +14,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _messageController = TextEditingController();
   List<Map<String, dynamic>> _messages = [];
+  UnsubscribeFunc? _unsubscribe;
 
   @override
   void initState() {
@@ -22,24 +23,35 @@ class _ChatScreenState extends State<ChatScreen> {
     _subscribeToMessages();
   }
 
+  @override
+  void dispose() {
+    _unsubscribe?.call();
+    _messageController.dispose();
+    super.dispose();
+  }
+
   void _loadMessages() async {
     final pb = Provider.of<PocketBaseService>(context, listen: false).pb;
     final result = await pb.collection('papo_support_messages').getList(
       filter: 'ticket = "${widget.ticketId}"',
       sort: 'created',
     );
-    setState(() {
-      _messages = result.items.map((m) => m.toJson()).toList();
-    });
+    if (mounted) {
+      setState(() {
+        _messages = result.items.map((m) => m.toJson()).toList();
+      });
+    }
   }
 
-  void _subscribeToMessages() {
+  void _subscribeToMessages() async {
      final pb = Provider.of<PocketBaseService>(context, listen: false).pb;
-     pb.collection('papo_support_messages').subscribe('*', (e) {
+     _unsubscribe = await pb.collection('papo_support_messages').subscribe('*', (e) {
        if (e.record != null && e.record!.getStringValue('ticket') == widget.ticketId) {
-         setState(() {
-           _messages.add(e.record!.toJson());
-         });
+         if (mounted) {
+           setState(() {
+             _messages.add(e.record!.toJson());
+           });
+         }
        }
      });
   }
@@ -73,7 +85,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     padding: const EdgeInsets.all(12),
                     margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                     decoration: BoxDecoration(
-                      color: isMe ? Colors.indigo : Colors.grey[300],
+                      color: isMe ? Theme.of(context).primaryColor : Colors.grey[300],
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(

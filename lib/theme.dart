@@ -2,44 +2,68 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Light Theme Colors
-  static const Color lightPrimary = Color(0xFF3F51B5);
-  static const Color lightSecondary = Color(0xFFFF4081);
-  static const Color lightBackground = Color(0xFFF5F5F5);
-  static const Color lightSurface = Color(0xFFFFFFFF);
-  static const Color lightText = Color(0xFF212121);
+  // African-Inspired Palette
+  // Light Mode: Warm Earth, Ochre, and Savanna Green
+  static const Color terracotta = Color(0xFFE2725B); // Earth
+  static const Color ochre = Color(0xFFCC7722); // Sun/Gold
+  static const Color savannaGreen = Color(0xFF8A9A5B); // Nature
+  static const Color lightSand = Color(0xFFFDF5E6); // Background
+  static const Color deepCoal = Color(0xFF2C2C2C); // Text
 
-  // Dark Theme Colors
-  static const Color darkPrimary = Color(0xFF9FA8DA);
-  static const Color darkSecondary = Color(0xFFFF80AB);
-  static const Color darkBackground = Color(0xFF121212);
-  static const Color darkSurface = Color(0xFF1E1E1E);
-  static const Color darkText = Color(0xFFE0E0E0);
+  // Dark Mode: Deep Turquoise, Midnight Blue, and Bronze
+  static const Color midnightBlue = Color(0xFF1A237E);
+  static const Color deepTurquoise = Color(0xFF006064);
+  static const Color bronze = Color(0xFFCD7F32);
+  static const Color darkAbyss = Color(0xFF0F0F0F);
+
+  // Gradients
+  static const LinearGradient africanSunset = LinearGradient(
+    colors: [Color(0xFFE2725B), Color(0xFFCC7722)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const LinearGradient savannaNight = LinearGradient(
+    colors: [Color(0xFF1A237E), Color(0xFF006064)],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
 
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      primaryColor: lightPrimary,
       colorScheme: ColorScheme.light(
-        primary: lightPrimary,
-        secondary: lightSecondary,
-        background: lightBackground,
-        surface: lightSurface,
-        onBackground: lightText,
-        onSurface: lightText,
+        primary: terracotta,
+        secondary: ochre,
+        tertiary: savannaGreen,
+        background: lightSand,
+        surface: Colors.white,
+        onBackground: deepCoal,
+        onSurface: deepCoal,
       ),
-      scaffoldBackgroundColor: lightBackground,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: lightPrimary,
-        foregroundColor: Colors.white,
+      textTheme: GoogleFonts.poppinsTextTheme(),
+      appBarTheme: AppBarTheme(
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
         elevation: 0,
+        titleTextStyle: GoogleFonts.poppins(
+          color: deepCoal,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      cardTheme: CardTheme(
+        elevation: 2,
+        color: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: lightPrimary,
+          backgroundColor: terracotta,
           foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
       ),
     );
@@ -49,26 +73,37 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      primaryColor: darkPrimary,
       colorScheme: ColorScheme.dark(
-        primary: darkPrimary,
-        secondary: darkSecondary,
-        background: darkBackground,
-        surface: darkSurface,
-        onBackground: darkText,
-        onSurface: darkText,
+        primary: bronze,
+        secondary: deepTurquoise,
+        tertiary: midnightBlue,
+        background: darkAbyss,
+        surface: const Color(0xFF1E1E1E),
+        onBackground: Colors.white,
+        onSurface: Colors.white,
       ),
-      scaffoldBackgroundColor: darkBackground,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: darkSurface,
-        foregroundColor: darkPrimary,
+      textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme),
+      appBarTheme: AppBarTheme(
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
         elevation: 0,
+        titleTextStyle: GoogleFonts.poppins(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      cardTheme: CardTheme(
+        elevation: 4,
+        color: const Color(0xFF252525),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: darkPrimary,
-          foregroundColor: Colors.black,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          backgroundColor: bronze,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
       ),
     );

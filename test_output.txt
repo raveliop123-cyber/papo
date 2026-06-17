@@ -1,0 +1,5 @@
+00:00 +0: loading /app/test/unit_test.dart
+00:00 +0: Model Tests User model should parse correctly
+00:00 +1: Model Tests Wallet model should parse correctly
+00:00 +2: Model Tests Transaction model should parse correctly
+00:00 +3: All tests passed!
