@@ -93,4 +93,4 @@ Les fichiers sont disponibles dans l'onglet **Actions** de votre dépôt GitHub 
 ---
 
 ## 📄 Licence
-© 2024 Groupe PAPO. Tous droits réservés.
+© 2026 Groupe TE-SEA. Tous droits réservés.
