@@ -2,25 +2,25 @@
     "collections": [
         {
             "id": "_pb_users_auth_",
-            "name": "users",
+            "name": "papo_users",
             "type": "auth",
             "system": true,
             "schema": [
                 {
-                    "id": "u_name_field_001",
+                    "id": "u_full_name_field_001",
                     "name": "name",
                     "type": "text",
                     "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
-                        "min": null,
-                        "max": null,
+                        "min": 2,
+                        "max": 120,
                         "pattern": ""
                     }
                 },
                 {
-                    "id": "u_avatar_field_002",
+                    "id": "u_avatar_file_field_002",
                     "name": "avatar",
                     "type": "file",
                     "system": false,
@@ -32,15 +32,17 @@
                         "mimeTypes": [
                             "image/jpeg",
                             "image/png",
-                            "image/svg+xml",
-                            "image/gif",
-                            "image/webp"
+                            "image/webp",
+                            "image/svg+xml"
                         ],
-                        "thumbs": []
+                        "thumbs": [
+                            "128x128",
+                            "320x320"
+                        ]
                     }
                 },
                 {
-                    "id": "u_phone_field_003",
+                    "id": "u_phone_text_field_003",
                     "name": "phone",
                     "type": "text",
                     "system": false,
@@ -53,29 +55,41 @@
                     }
                 },
                 {
-                    "id": "u_pin_field_004",
-                    "name": "pin",
-                    "type": "text",
+                    "id": "u_role_select_field_004",
+                    "name": "role",
+                    "type": "select",
                     "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
-                        "min": 4,
-                        "max": 6,
-                        "pattern": "^\\d{4,6}$"
+                        "maxSelect": 1,
+                        "values": [
+                            "customer",
+                            "merchant",
+                            "support_agent",
+                            "admin"
+                        ]
                     }
                 },
                 {
-                    "id": "u_verified_field_005",
-                    "name": "is_verified",
-                    "type": "bool",
+                    "id": "u_status_select_field_005",
+                    "name": "status",
+                    "type": "select",
                     "system": false,
-                    "required": false,
+                    "required": true,
                     "unique": false,
-                    "options": {}
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "active",
+                            "suspended",
+                            "blocked",
+                            "pending_review"
+                        ]
+                    }
                 },
                 {
-                    "id": "u_theme_field_006",
+                    "id": "u_theme_select_field_006",
                     "name": "theme_preference",
                     "type": "select",
                     "system": false,
@@ -91,20 +105,90 @@
                     }
                 },
                 {
-                    "id": "u_nfc_field_007",
-                    "name": "nfc_enabled",
+                    "id": "u_lang_select_field_007",
+                    "name": "preferred_language",
+                    "type": "select",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "fr",
+                            "en",
+                            "ln",
+                            "sw",
+                            "wo"
+                        ]
+                    }
+                },
+                {
+                    "id": "u_kyc_level_num_field_008",
+                    "name": "kyc_level",
+                    "type": "number",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 3,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "u_merchant_bool_field_009",
+                    "name": "merchant_enabled",
                     "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "u_bio_bool_field_010",
+                    "name": "biometrics_enabled",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "u_offline_bool_field_011",
+                    "name": "offline_payments_enabled",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "u_last_seen_date_field_012",
+                    "name": "last_seen_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "u_security_json_field_013",
+                    "name": "security_settings",
+                    "type": "json",
                     "system": false,
                     "required": false,
                     "unique": false,
                     "options": {}
                 }
             ],
-            "listRule": "id = @request.auth.id",
-            "viewRule": "id = @request.auth.id",
+            "listRule": "id = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "id = @request.auth.id || @request.auth.role = \"admin\"",
             "createRule": "",
-            "updateRule": "id = @request.auth.id",
-            "deleteRule": "id = @request.auth.id",
+            "updateRule": "id = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\"",
             "auth": {
                 "allowEmailAuth": false,
                 "allowOAuth2Auth": false,
@@ -128,7 +212,7 @@
                     "type": "relation",
                     "system": false,
                     "required": true,
-                    "unique": false,
+                    "unique": true,
                     "options": {
                         "collectionId": "_pb_users_auth_",
                         "cascadeDelete": true,
@@ -138,7 +222,7 @@
                     }
                 },
                 {
-                    "id": "w_balance_field_002",
+                    "id": "w_balance_num_field_002",
                     "name": "balance",
                     "type": "number",
                     "system": false,
@@ -151,7 +235,7 @@
                     }
                 },
                 {
-                    "id": "w_currency_field_003",
+                    "id": "w_currency_text_field_003",
                     "name": "currency",
                     "type": "text",
                     "system": false,
@@ -162,94 +246,22 @@
                         "max": 3,
                         "pattern": "^[A-Z]{3}$"
                     }
-                }
-            ],
-            "listRule": "user = @request.auth.id",
-            "viewRule": "user = @request.auth.id",
-            "createRule": "user = @request.auth.id",
-            "updateRule": "user = @request.auth.id",
-            "deleteRule": "user = @request.auth.id"
-        },
-        {
-            "id": "col_papo_transactions_001",
-            "name": "papo_transactions",
-            "type": "base",
-            "system": false,
-            "schema": [
-                {
-                    "id": "t_sender_rel_field_001",
-                    "name": "sender",
-                    "type": "relation",
-                    "system": false,
-                    "required": true,
-                    "unique": false,
-                    "options": {
-                        "collectionId": "_pb_users_auth_",
-                        "cascadeDelete": false,
-                        "minSelect": null,
-                        "maxSelect": 1,
-                        "displayFields": []
-                    }
                 },
                 {
-                    "id": "t_receiver_rel_field_002",
-                    "name": "receiver",
-                    "type": "relation",
-                    "system": false,
-                    "required": true,
-                    "unique": false,
-                    "options": {
-                        "collectionId": "_pb_users_auth_",
-                        "cascadeDelete": false,
-                        "minSelect": null,
-                        "maxSelect": 1,
-                        "displayFields": []
-                    }
-                },
-                {
-                    "id": "t_amount_field_003",
-                    "name": "amount",
+                    "id": "w_reserved_num_field_004",
+                    "name": "reserved_balance",
                     "type": "number",
                     "system": false,
-                    "required": true,
+                    "required": false,
                     "unique": false,
                     "options": {
-                        "min": 0.01,
+                        "min": 0,
                         "max": null,
                         "positive": true
                     }
                 },
                 {
-                    "id": "t_currency_field_004",
-                    "name": "currency",
-                    "type": "text",
-                    "system": false,
-                    "required": true,
-                    "unique": false,
-                    "options": {
-                        "min": 3,
-                        "max": 3,
-                        "pattern": "^[A-Z]{3}$"
-                    }
-                },
-                {
-                    "id": "t_type_field_005",
-                    "name": "type",
-                    "type": "select",
-                    "system": false,
-                    "required": true,
-                    "unique": false,
-                    "options": {
-                        "maxSelect": 1,
-                        "values": [
-                            "deposit",
-                            "withdrawal",
-                            "transfer"
-                        ]
-                    }
-                },
-                {
-                    "id": "t_status_field_006",
+                    "id": "w_status_select_field_005",
                     "name": "status",
                     "type": "select",
                     "system": false,
@@ -258,15 +270,78 @@
                     "options": {
                         "maxSelect": 1,
                         "values": [
-                            "pending",
-                            "completed",
-                            "failed"
+                            "active",
+                            "frozen",
+                            "closed"
                         ]
                     }
                 },
                 {
-                    "id": "t_method_field_007",
-                    "name": "method",
+                    "id": "w_limits_json_field_006",
+                    "name": "limits",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "updateRule": "@request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_devices_001",
+            "name": "papo_devices",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "d_user_rel_field_001",
+                    "name": "user",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "d_device_id_text_field_002",
+                    "name": "device_id",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 10,
+                        "max": 255,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "d_name_text_field_003",
+                    "name": "name",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": 120,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "d_platform_select_field_004",
+                    "name": "platform",
                     "type": "select",
                     "system": false,
                     "required": true,
@@ -274,41 +349,62 @@
                     "options": {
                         "maxSelect": 1,
                         "values": [
-                            "app",
-                            "nfc",
-                            "qr",
-                            "bluetooth"
+                            "android",
+                            "ios",
+                            "web",
+                            "desktop"
                         ]
                     }
                 },
                 {
-                    "id": "t_notes_field_008",
-                    "name": "notes",
+                    "id": "d_public_key_text_field_005",
+                    "name": "public_key",
                     "type": "text",
                     "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
-                        "min": null,
-                        "max": 255,
+                        "min": 20,
+                        "max": 4096,
                         "pattern": ""
+                    }
+                },
+                {
+                    "id": "d_trusted_bool_field_006",
+                    "name": "is_trusted",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "d_last_seen_date_field_007",
+                    "name": "last_seen_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
                     }
                 }
             ],
-            "listRule": "sender = @request.auth.id || receiver = @request.auth.id",
-            "viewRule": "sender = @request.auth.id || receiver = @request.auth.id",
-            "createRule": "sender = @request.auth.id",
-            "updateRule": "",
-            "deleteRule": ""
+            "listRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "user = @request.auth.id",
+            "updateRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "user = @request.auth.id || @request.auth.role = \"admin\""
         },
         {
-            "id": "col_papo_kyc_001",
-            "name": "papo_kyc",
+            "id": "col_papo_merchant_profiles_001",
+            "name": "papo_merchant_profiles",
             "type": "base",
             "system": false,
             "schema": [
                 {
-                    "id": "k_user_rel_field_001",
+                    "id": "m_user_rel_field_001",
                     "name": "user",
                     "type": "relation",
                     "system": false,
@@ -323,54 +419,79 @@
                     }
                 },
                 {
-                    "id": "k_doctype_field_002",
-                    "name": "document_type",
-                    "type": "select",
-                    "system": false,
-                    "required": true,
-                    "unique": false,
-                    "options": {
-                        "maxSelect": 1,
-                        "values": [
-                            "id_card",
-                            "passport",
-                            "proof_of_address"
-                        ]
-                    }
-                },
-                {
-                    "id": "k_docnum_field_003",
-                    "name": "document_number",
+                    "id": "m_business_text_field_002",
+                    "name": "business_name",
                     "type": "text",
                     "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
-                        "min": null,
-                        "max": null,
+                        "min": 2,
+                        "max": 160,
                         "pattern": ""
                     }
                 },
                 {
-                    "id": "k_docfile_field_004",
-                    "name": "document_file",
-                    "type": "file",
+                    "id": "m_category_text_field_003",
+                    "name": "category",
+                    "type": "text",
                     "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
-                        "maxSelect": 1,
-                        "maxSize": 10485760,
-                        "mimeTypes": [
-                            "image/jpeg",
-                            "image/png",
-                            "application/pdf"
-                        ],
-                        "thumbs": []
+                        "min": 2,
+                        "max": 80,
+                        "pattern": ""
                     }
                 },
                 {
-                    "id": "k_status_field_005",
+                    "id": "m_city_text_field_004",
+                    "name": "city",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": 80,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "m_address_text_field_005",
+                    "name": "address",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": 255,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "m_logo_file_field_006",
+                    "name": "logo",
+                    "type": "file",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "maxSize": 5242880,
+                        "mimeTypes": [
+                            "image/jpeg",
+                            "image/png",
+                            "image/webp"
+                        ],
+                        "thumbs": [
+                            "256x256"
+                        ]
+                    }
+                },
+                {
+                    "id": "m_status_select_field_007",
                     "name": "status",
                     "type": "select",
                     "system": false,
@@ -381,29 +502,703 @@
                         "values": [
                             "pending",
                             "approved",
+                            "rejected",
+                            "suspended"
+                        ]
+                    }
+                },
+                {
+                    "id": "m_hours_json_field_008",
+                    "name": "opening_hours",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "@request.auth.id != \"\"",
+            "viewRule": "@request.auth.id != \"\"",
+            "createRule": "user = @request.auth.id",
+            "updateRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_transactions_001",
+            "name": "papo_transactions",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "t_sender_rel_field_001",
+                    "name": "sender",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "t_receiver_rel_field_002",
+                    "name": "receiver",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "t_wallet_rel_field_003",
+                    "name": "wallet",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_wallets_001",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "t_amount_num_field_004",
+                    "name": "amount",
+                    "type": "number",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 0.01,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "t_fee_num_field_005",
+                    "name": "fee",
+                    "type": "number",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "t_currency_text_field_006",
+                    "name": "currency",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 3,
+                        "max": 3,
+                        "pattern": "^[A-Z]{3}$"
+                    }
+                },
+                {
+                    "id": "t_type_select_field_007",
+                    "name": "type",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "deposit",
+                            "withdrawal",
+                            "transfer",
+                            "merchant_payment",
+                            "tontine_contribution",
+                            "tontine_payout",
+                            "refund"
+                        ]
+                    }
+                },
+                {
+                    "id": "t_method_select_field_008",
+                    "name": "method",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "app",
+                            "nfc",
+                            "qr",
+                            "bluetooth",
+                            "cash_agent",
+                            "bank",
+                            "mobile_money"
+                        ]
+                    }
+                },
+                {
+                    "id": "t_status_select_field_009",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "draft",
+                            "pending",
+                            "completed",
+                            "failed",
+                            "cancelled",
+                            "reversed"
+                        ]
+                    }
+                },
+                {
+                    "id": "t_reference_text_field_010",
+                    "name": "reference",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 8,
+                        "max": 80,
+                        "pattern": "^[A-Z0-9_-]+$"
+                    }
+                },
+                {
+                    "id": "t_external_ref_text_field_011",
+                    "name": "external_reference",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": 160,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "t_notes_text_field_012",
+                    "name": "notes",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 255,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "t_metadata_json_field_013",
+                    "name": "metadata",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "sender = @request.auth.id || receiver = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "sender = @request.auth.id || receiver = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "sender = @request.auth.id || @request.auth.role = \"admin\"",
+            "updateRule": "@request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_payment_requests_001",
+            "name": "papo_payment_requests",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "pr_requester_rel_field_001",
+                    "name": "requester",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "pr_payer_rel_field_002",
+                    "name": "payer",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "pr_amount_num_field_003",
+                    "name": "amount",
+                    "type": "number",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 0.01,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "pr_currency_text_field_004",
+                    "name": "currency",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 3,
+                        "max": 3,
+                        "pattern": "^[A-Z]{3}$"
+                    }
+                },
+                {
+                    "id": "pr_method_select_field_005",
+                    "name": "method",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "qr",
+                            "nfc",
+                            "bluetooth",
+                            "link"
+                        ]
+                    }
+                },
+                {
+                    "id": "pr_token_text_field_006",
+                    "name": "token",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 12,
+                        "max": 180,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "pr_status_select_field_007",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "open",
+                            "paid",
+                            "expired",
+                            "cancelled"
+                        ]
+                    }
+                },
+                {
+                    "id": "pr_expires_date_field_008",
+                    "name": "expires_at",
+                    "type": "date",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "pr_payload_json_field_009",
+                    "name": "payload",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "requester = @request.auth.id || payer = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "requester = @request.auth.id || payer = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "requester = @request.auth.id || @request.auth.role = \"admin\"",
+            "updateRule": "requester = @request.auth.id || payer = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "requester = @request.auth.id || @request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_offline_sessions_001",
+            "name": "papo_offline_sessions",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "os_initiator_rel_field_001",
+                    "name": "initiator",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "os_counter_rel_field_002",
+                    "name": "counterparty",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "os_device_rel_field_003",
+                    "name": "device",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_devices_001",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "os_method_select_field_004",
+                    "name": "method",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "nfc",
+                            "bluetooth",
+                            "qr"
+                        ]
+                    }
+                },
+                {
+                    "id": "os_amount_num_field_005",
+                    "name": "amount",
+                    "type": "number",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 0.01,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "os_currency_text_field_006",
+                    "name": "currency",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 3,
+                        "max": 3,
+                        "pattern": "^[A-Z]{3}$"
+                    }
+                },
+                {
+                    "id": "os_nonce_text_field_007",
+                    "name": "nonce",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 16,
+                        "max": 160,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "os_hash_text_field_008",
+                    "name": "payload_hash",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 32,
+                        "max": 160,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "os_signed_text_field_009",
+                    "name": "signed_payload",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 32,
+                        "max": 4096,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "os_status_select_field_010",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "created",
+                            "accepted",
+                            "synced",
+                            "rejected",
+                            "expired"
+                        ]
+                    }
+                },
+                {
+                    "id": "os_expires_date_field_011",
+                    "name": "expires_at",
+                    "type": "date",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "os_synced_date_field_012",
+                    "name": "synced_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "os_metadata_json_field_013",
+                    "name": "metadata",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "initiator = @request.auth.id || counterparty = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "initiator = @request.auth.id || counterparty = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "initiator = @request.auth.id",
+            "updateRule": "initiator = @request.auth.id || counterparty = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_kyc_001",
+            "name": "papo_kyc",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "k_user_rel_field_001",
+                    "name": "user",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "k_doc_type_select_field_002",
+                    "name": "document_type",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "id_card",
+                            "passport",
+                            "driver_license",
+                            "residence_permit",
+                            "proof_of_address"
+                        ]
+                    }
+                },
+                {
+                    "id": "k_doc_number_text_field_003",
+                    "name": "document_number",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 4,
+                        "max": 80,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "k_doc_file_field_004",
+                    "name": "document_file",
+                    "type": "file",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 3,
+                        "maxSize": 10485760,
+                        "mimeTypes": [
+                            "image/jpeg",
+                            "image/png",
+                            "application/pdf"
+                        ],
+                        "thumbs": [
+                            "640x640"
+                        ]
+                    }
+                },
+                {
+                    "id": "k_status_select_field_005",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "draft",
+                            "submitted",
+                            "pending_review",
+                            "approved",
                             "rejected"
                         ]
                     }
                 },
                 {
-                    "id": "k_reason_field_006",
+                    "id": "k_reviewer_rel_field_006",
+                    "name": "reviewer",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "k_reason_text_field_007",
                     "name": "rejection_reason",
                     "type": "text",
                     "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
-                        "min": null,
-                        "max": null,
+                        "min": 0,
+                        "max": 500,
                         "pattern": ""
                     }
+                },
+                {
+                    "id": "k_reviewed_date_field_008",
+                    "name": "reviewed_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "k_checks_json_field_009",
+                    "name": "checks",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
                 }
             ],
-            "listRule": "user = @request.auth.id",
-            "viewRule": "user = @request.auth.id",
+            "listRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
             "createRule": "user = @request.auth.id",
-            "updateRule": "",
-            "deleteRule": ""
+            "updateRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
         },
         {
             "id": "col_papo_tontines_001",
@@ -412,7 +1207,7 @@
             "system": false,
             "schema": [
                 {
-                    "id": "tn_name_field_001",
+                    "id": "tn_name_text_field_001",
                     "name": "name",
                     "type": "text",
                     "system": false,
@@ -420,54 +1215,25 @@
                     "unique": false,
                     "options": {
                         "min": 3,
-                        "max": 100,
+                        "max": 120,
                         "pattern": ""
                     }
                 },
                 {
-                    "id": "tn_desc_field_002",
+                    "id": "tn_desc_text_field_002",
                     "name": "description",
                     "type": "text",
                     "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
-                        "min": null,
-                        "max": null,
+                        "min": 0,
+                        "max": 1000,
                         "pattern": ""
                     }
                 },
                 {
-                    "id": "tn_amount_field_003",
-                    "name": "contribution_amount",
-                    "type": "number",
-                    "system": false,
-                    "required": true,
-                    "unique": false,
-                    "options": {
-                        "min": 1,
-                        "max": null,
-                        "positive": true
-                    }
-                },
-                {
-                    "id": "tn_freq_field_004",
-                    "name": "frequency",
-                    "type": "select",
-                    "system": false,
-                    "required": true,
-                    "unique": false,
-                    "options": {
-                        "maxSelect": 1,
-                        "values": [
-                            "daily",
-                            "weekly",
-                            "monthly"
-                        ]
-                    }
-                },
-                {
-                    "id": "tn_creator_rel_field_005",
+                    "id": "tn_creator_rel_field_003",
                     "name": "creator",
                     "type": "relation",
                     "system": false,
@@ -482,7 +1248,75 @@
                     }
                 },
                 {
-                    "id": "tn_status_field_006",
+                    "id": "tn_amount_num_field_004",
+                    "name": "contribution_amount",
+                    "type": "number",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "tn_currency_text_field_005",
+                    "name": "currency",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 3,
+                        "max": 3,
+                        "pattern": "^[A-Z]{3}$"
+                    }
+                },
+                {
+                    "id": "tn_frequency_select_field_006",
+                    "name": "frequency",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "daily",
+                            "weekly",
+                            "biweekly",
+                            "monthly"
+                        ]
+                    }
+                },
+                {
+                    "id": "tn_capacity_num_field_007",
+                    "name": "max_members",
+                    "type": "number",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 2,
+                        "max": 200,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "tn_start_date_field_008",
+                    "name": "start_date",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "tn_status_select_field_009",
                     "name": "status",
                     "type": "select",
                     "system": false,
@@ -491,27 +1325,48 @@
                     "options": {
                         "maxSelect": 1,
                         "values": [
-                            "pending",
+                            "draft",
+                            "open",
                             "active",
-                            "completed"
+                            "paused",
+                            "completed",
+                            "cancelled"
                         ]
                     }
+                },
+                {
+                    "id": "tn_auto_bool_field_010",
+                    "name": "auto_debit_enabled",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "tn_rules_json_field_011",
+                    "name": "rules",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
                 }
             ],
             "listRule": "@request.auth.id != \"\"",
             "viewRule": "@request.auth.id != \"\"",
             "createRule": "@request.auth.id != \"\"",
-            "updateRule": "creator = @request.auth.id",
-            "deleteRule": "creator = @request.auth.id"
+            "updateRule": "creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "creator = @request.auth.id || @request.auth.role = \"admin\""
         },
         {
-            "id": "col_papo_tm_001",
+            "id": "col_papo_tontine_members_001",
             "name": "papo_tontine_members",
             "type": "base",
             "system": false,
             "schema": [
                 {
-                    "id": "tm_tn_rel_field_001",
+                    "id": "tm_tontine_rel_field_001",
                     "name": "tontine",
                     "type": "relation",
                     "system": false,
@@ -541,7 +1396,7 @@
                     }
                 },
                 {
-                    "id": "tm_role_field_003",
+                    "id": "tm_role_select_field_003",
                     "name": "role",
                     "type": "select",
                     "system": false,
@@ -550,13 +1405,14 @@
                     "options": {
                         "maxSelect": 1,
                         "values": [
-                            "admin",
+                            "organizer",
+                            "treasurer",
                             "member"
                         ]
                     }
                 },
                 {
-                    "id": "tm_status_field_004",
+                    "id": "tm_status_select_field_004",
                     "name": "status",
                     "type": "select",
                     "system": false,
@@ -567,13 +1423,15 @@
                         "values": [
                             "invited",
                             "joined",
-                            "left"
+                            "left",
+                            "removed",
+                            "blocked"
                         ]
                     }
                 },
                 {
-                    "id": "tm_rank_field_005",
-                    "name": "rank",
+                    "id": "tm_payout_order_num_field_005",
+                    "name": "payout_order",
                     "type": "number",
                     "system": false,
                     "required": false,
@@ -583,22 +1441,34 @@
                         "max": null,
                         "positive": true
                     }
+                },
+                {
+                    "id": "tm_joined_date_field_006",
+                    "name": "joined_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
                 }
             ],
-            "listRule": "user = @request.auth.id || tontine.creator = @request.auth.id",
-            "viewRule": "user = @request.auth.id || tontine.creator = @request.auth.id",
-            "createRule": "tontine.creator = @request.auth.id || @request.auth.id != \"\"",
-            "updateRule": "user = @request.auth.id || tontine.creator = @request.auth.id",
-            "deleteRule": "tontine.creator = @request.auth.id"
+            "listRule": "user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "updateRule": "user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "tontine.creator = @request.auth.id || @request.auth.role = \"admin\""
         },
         {
-            "id": "col_papo_tc_001",
+            "id": "col_papo_tontine_contrib_001",
             "name": "papo_tontine_contributions",
             "type": "base",
             "system": false,
             "schema": [
                 {
-                    "id": "tc_tn_rel_field_001",
+                    "id": "tc_tontine_rel_field_001",
                     "name": "tontine",
                     "type": "relation",
                     "system": false,
@@ -613,14 +1483,14 @@
                     }
                 },
                 {
-                    "id": "tc_tm_rel_field_002",
+                    "id": "tc_member_rel_field_002",
                     "name": "member",
                     "type": "relation",
                     "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
-                        "collectionId": "col_papo_tm_001",
+                        "collectionId": "col_papo_tontine_members_001",
                         "cascadeDelete": true,
                         "minSelect": null,
                         "maxSelect": 1,
@@ -628,20 +1498,59 @@
                     }
                 },
                 {
-                    "id": "tc_amount_field_003",
+                    "id": "tc_transaction_rel_field_003",
+                    "name": "transaction",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_transactions_001",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "tc_amount_num_field_004",
                     "name": "amount",
                     "type": "number",
                     "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
-                        "min": 0,
+                        "min": 0.01,
                         "max": null,
                         "positive": true
                     }
                 },
                 {
-                    "id": "tc_status_field_004",
+                    "id": "tc_due_date_field_005",
+                    "name": "due_date",
+                    "type": "date",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "tc_paid_date_field_006",
+                    "name": "paid_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "tc_status_select_field_007",
                     "name": "status",
                     "type": "select",
                     "system": false,
@@ -652,19 +1561,414 @@
                         "values": [
                             "pending",
                             "paid",
-                            "overdue"
+                            "late",
+                            "waived",
+                            "failed"
                         ]
                     }
                 }
             ],
-            "listRule": "member.user = @request.auth.id || tontine.creator = @request.auth.id",
-            "viewRule": "member.user = @request.auth.id || tontine.creator = @request.auth.id",
-            "createRule": "tontine.creator = @request.auth.id || member.user = @request.auth.id",
-            "updateRule": "tontine.creator = @request.auth.id",
-            "deleteRule": "tontine.creator = @request.auth.id"
+            "listRule": "member.user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "member.user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "updateRule": "member.user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "tontine.creator = @request.auth.id || @request.auth.role = \"admin\""
         },
         {
-            "id": "col_papo_st_001",
+            "id": "col_papo_tontine_payouts_001",
+            "name": "papo_tontine_payouts",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "tp_tontine_rel_field_001",
+                    "name": "tontine",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_tontines_001",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "tp_member_rel_field_002",
+                    "name": "member",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_tontine_members_001",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "tp_transaction_rel_field_003",
+                    "name": "transaction",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_transactions_001",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "tp_amount_num_field_004",
+                    "name": "amount",
+                    "type": "number",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 0.01,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "tp_scheduled_date_field_005",
+                    "name": "scheduled_at",
+                    "type": "date",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "tp_paid_date_field_006",
+                    "name": "paid_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "tp_status_select_field_007",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "scheduled",
+                            "processing",
+                            "paid",
+                            "failed",
+                            "cancelled"
+                        ]
+                    }
+                }
+            ],
+            "listRule": "member.user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "member.user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "updateRule": "tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_notifications_001",
+            "name": "papo_notifications",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "nt_user_rel_field_001",
+                    "name": "user",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "nt_title_text_field_002",
+                    "name": "title",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": 140,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "nt_message_text_field_003",
+                    "name": "message",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": 1000,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "nt_type_select_field_004",
+                    "name": "type",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "info",
+                            "security",
+                            "transaction",
+                            "tontine",
+                            "support",
+                            "ecosystem",
+                            "kyc"
+                        ]
+                    }
+                },
+                {
+                    "id": "nt_read_bool_field_005",
+                    "name": "is_read",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "nt_deep_link_text_field_006",
+                    "name": "deep_link",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 255,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "nt_payload_json_field_007",
+                    "name": "payload",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "@request.auth.role = \"admin\"",
+            "updateRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "user = @request.auth.id || @request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_notification_prefs_001",
+            "name": "papo_notification_preferences",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "np_user_rel_field_001",
+                    "name": "user",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "np_push_bool_field_002",
+                    "name": "push_enabled",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "np_sms_bool_field_003",
+                    "name": "sms_enabled",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "np_email_bool_field_004",
+                    "name": "email_enabled",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "np_transaction_bool_field_005",
+                    "name": "transaction_alerts",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "np_tontine_bool_field_006",
+                    "name": "tontine_alerts",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "np_support_bool_field_007",
+                    "name": "support_alerts",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "np_quiet_json_field_008",
+                    "name": "quiet_hours",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "user = @request.auth.id",
+            "updateRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "user = @request.auth.id || @request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_push_tokens_001",
+            "name": "papo_push_tokens",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "pt_user_rel_field_001",
+                    "name": "user",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "pt_device_rel_field_002",
+                    "name": "device",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_devices_001",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "pt_token_text_field_003",
+                    "name": "token",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 20,
+                        "max": 4096,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "pt_provider_select_field_004",
+                    "name": "provider",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "fcm",
+                            "apns",
+                            "webpush"
+                        ]
+                    }
+                },
+                {
+                    "id": "pt_last_used_date_field_005",
+                    "name": "last_used_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                }
+            ],
+            "listRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "user = @request.auth.id",
+            "updateRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "user = @request.auth.id || @request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_support_tickets_001",
             "name": "papo_support_tickets",
             "type": "base",
             "system": false,
@@ -685,7 +1989,22 @@
                     }
                 },
                 {
-                    "id": "st_subject_field_002",
+                    "id": "st_assignee_rel_field_002",
+                    "name": "assignee",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "st_subject_text_field_003",
                     "name": "subject",
                     "type": "text",
                     "system": false,
@@ -698,8 +2017,8 @@
                     }
                 },
                 {
-                    "id": "st_status_field_003",
-                    "name": "status",
+                    "id": "st_category_select_field_004",
+                    "name": "category",
                     "type": "select",
                     "system": false,
                     "required": true,
@@ -707,14 +2026,17 @@
                     "options": {
                         "maxSelect": 1,
                         "values": [
-                            "open",
-                            "in_progress",
-                            "closed"
+                            "account",
+                            "payment",
+                            "tontine",
+                            "kyc",
+                            "technical",
+                            "other"
                         ]
                     }
                 },
                 {
-                    "id": "st_priority_field_004",
+                    "id": "st_priority_select_field_005",
                     "name": "priority",
                     "type": "select",
                     "system": false,
@@ -725,19 +2047,62 @@
                         "values": [
                             "low",
                             "medium",
-                            "high"
+                            "high",
+                            "urgent"
                         ]
+                    }
+                },
+                {
+                    "id": "st_status_select_field_006",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "open",
+                            "in_progress",
+                            "waiting_customer",
+                            "resolved",
+                            "closed"
+                        ]
+                    }
+                },
+                {
+                    "id": "st_due_date_field_007",
+                    "name": "response_due_at",
+                    "type": "date",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "st_closed_date_field_008",
+                    "name": "closed_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
                     }
                 }
             ],
-            "listRule": "user = @request.auth.id",
-            "viewRule": "user = @request.auth.id",
+            "listRule": "user = @request.auth.id || assignee = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || assignee = @request.auth.id || @request.auth.role = \"admin\"",
             "createRule": "user = @request.auth.id",
-            "updateRule": "user = @request.auth.id",
-            "deleteRule": ""
+            "updateRule": "assignee = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
         },
         {
-            "id": "col_papo_sm_001",
+            "id": "col_papo_support_messages_001",
             "name": "papo_support_messages",
             "type": "base",
             "system": false,
@@ -750,7 +2115,7 @@
                     "required": true,
                     "unique": false,
                     "options": {
-                        "collectionId": "col_papo_st_001",
+                        "collectionId": "col_papo_support_tickets_001",
                         "cascadeDelete": true,
                         "minSelect": null,
                         "maxSelect": 1,
@@ -773,7 +2138,7 @@
                     }
                 },
                 {
-                    "id": "sm_content_field_003",
+                    "id": "sm_content_text_field_003",
                     "name": "content",
                     "type": "text",
                     "system": false,
@@ -781,81 +2146,114 @@
                     "unique": false,
                     "options": {
                         "min": 1,
-                        "max": null,
+                        "max": 4000,
                         "pattern": ""
                     }
                 },
                 {
-                    "id": "sm_file_field_004",
+                    "id": "sm_attachment_file_field_004",
                     "name": "attachment",
                     "type": "file",
                     "system": false,
                     "required": false,
                     "unique": false,
                     "options": {
-                        "maxSelect": 1,
-                        "maxSize": 5242880,
-                        "mimeTypes": [],
-                        "thumbs": []
+                        "maxSelect": 4,
+                        "maxSize": 10485760,
+                        "mimeTypes": [
+                            "image/jpeg",
+                            "image/png",
+                            "application/pdf",
+                            "text/plain"
+                        ],
+                        "thumbs": [
+                            "640x640"
+                        ]
                     }
+                },
+                {
+                    "id": "sm_internal_bool_field_005",
+                    "name": "is_internal",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
                 }
             ],
-            "listRule": "ticket.user = @request.auth.id",
-            "viewRule": "ticket.user = @request.auth.id",
-            "createRule": "ticket.user = @request.auth.id",
-            "updateRule": "",
-            "deleteRule": ""
+            "listRule": "(is_internal = false && ticket.user = @request.auth.id) || ticket.assignee = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "(is_internal = false && ticket.user = @request.auth.id) || ticket.assignee = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "ticket.user = @request.auth.id || ticket.assignee = @request.auth.id || @request.auth.role = \"admin\"",
+            "updateRule": "@request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
         },
         {
-            "id": "col_papo_notif_001",
-            "name": "papo_notifications",
+            "id": "col_papo_faq_articles_001",
+            "name": "papo_faq_articles",
             "type": "base",
             "system": false,
             "schema": [
                 {
-                    "id": "nt_user_rel_field_001",
-                    "name": "user",
-                    "type": "relation",
-                    "system": false,
-                    "required": true,
-                    "unique": false,
-                    "options": {
-                        "collectionId": "_pb_users_auth_",
-                        "cascadeDelete": true,
-                        "minSelect": null,
-                        "maxSelect": 1,
-                        "displayFields": []
-                    }
-                },
-                {
-                    "id": "nt_title_field_002",
+                    "id": "fq_title_text_field_001",
                     "name": "title",
                     "type": "text",
                     "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
-                        "min": null,
-                        "max": 100,
+                        "min": 3,
+                        "max": 180,
                         "pattern": ""
                     }
                 },
                 {
-                    "id": "nt_msg_field_003",
-                    "name": "message",
+                    "id": "fq_slug_text_field_002",
+                    "name": "slug",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 3,
+                        "max": 180,
+                        "pattern": "^[a-z0-9-]+$"
+                    }
+                },
+                {
+                    "id": "fq_category_select_field_003",
+                    "name": "category",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "account",
+                            "payment",
+                            "offline",
+                            "tontine",
+                            "kyc",
+                            "support"
+                        ]
+                    }
+                },
+                {
+                    "id": "fq_content_text_field_004",
+                    "name": "content",
                     "type": "text",
                     "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
-                        "min": null,
-                        "max": null,
+                        "min": 20,
+                        "max": 8000,
                         "pattern": ""
                     }
                 },
                 {
-                    "id": "nt_read_field_004",
-                    "name": "is_read",
+                    "id": "fq_publish_bool_field_005",
+                    "name": "is_published",
                     "type": "bool",
                     "system": false,
                     "required": false,
@@ -863,7 +2261,72 @@
                     "options": {}
                 },
                 {
-                    "id": "nt_type_field_005",
+                    "id": "fq_order_num_field_006",
+                    "name": "sort_order",
+                    "type": "number",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": null,
+                        "positive": true
+                    }
+                }
+            ],
+            "listRule": "is_published = true || @request.auth.role = \"admin\"",
+            "viewRule": "is_published = true || @request.auth.role = \"admin\"",
+            "createRule": "@request.auth.role = \"admin\"",
+            "updateRule": "@request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_ecosystem_001",
+            "name": "papo_ecosystem",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "ec_name_text_field_001",
+                    "name": "name",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 2,
+                        "max": 120,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "ec_slug_text_field_002",
+                    "name": "slug",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 2,
+                        "max": 120,
+                        "pattern": "^[a-z0-9-]+$"
+                    }
+                },
+                {
+                    "id": "ec_description_text_field_003",
+                    "name": "description",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 1000,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "ec_type_select_field_004",
                     "name": "type",
                     "type": "select",
                     "system": false,
@@ -872,67 +2335,28 @@
                     "options": {
                         "maxSelect": 1,
                         "values": [
-                            "info",
-                            "transaction",
-                            "tontine",
-                            "support"
+                            "internal_app",
+                            "partner_service",
+                            "promotion",
+                            "web_service"
                         ]
                     }
-                }
-            ],
-            "listRule": "user = @request.auth.id",
-            "viewRule": "user = @request.auth.id",
-            "createRule": "",
-            "updateRule": "user = @request.auth.id",
-            "deleteRule": "user = @request.auth.id"
-        },
-        {
-            "id": "col_papo_eco_001",
-            "name": "papo_ecosystem",
-            "type": "base",
-            "system": false,
-            "schema": [
-                {
-                    "id": "ec_name_field_001",
-                    "name": "name",
-                    "type": "text",
-                    "system": false,
-                    "required": true,
-                    "unique": true,
-                    "options": {
-                        "min": null,
-                        "max": null,
-                        "pattern": ""
-                    }
                 },
                 {
-                    "id": "ec_desc_field_002",
-                    "name": "description",
-                    "type": "text",
-                    "system": false,
-                    "required": false,
-                    "unique": false,
-                    "options": {
-                        "min": null,
-                        "max": null,
-                        "pattern": ""
-                    }
-                },
-                {
-                    "id": "ec_url_field_003",
+                    "id": "ec_url_text_field_005",
                     "name": "url",
                     "type": "text",
                     "system": false,
                     "required": true,
                     "unique": false,
                     "options": {
-                        "min": null,
-                        "max": null,
+                        "min": 5,
+                        "max": 500,
                         "pattern": ""
                     }
                 },
                 {
-                    "id": "ec_icon_field_004",
+                    "id": "ec_icon_file_field_006",
                     "name": "icon",
                     "type": "file",
                     "system": false,
@@ -944,15 +2368,191 @@
                         "mimeTypes": [
                             "image/jpeg",
                             "image/png",
-                            "image/svg+xml"
+                            "image/svg+xml",
+                            "image/webp"
                         ],
-                        "thumbs": []
+                        "thumbs": [
+                            "256x256"
+                        ]
+                    }
+                },
+                {
+                    "id": "ec_active_bool_field_007",
+                    "name": "is_active",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "ec_metadata_json_field_008",
+                    "name": "metadata",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "is_active = true || @request.auth.role = \"admin\"",
+            "viewRule": "is_active = true || @request.auth.role = \"admin\"",
+            "createRule": "@request.auth.role = \"admin\"",
+            "updateRule": "@request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_app_settings_001",
+            "name": "papo_app_settings",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "as_key_text_field_001",
+                    "name": "key",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 2,
+                        "max": 120,
+                        "pattern": "^[a-z0-9_.-]+$"
+                    }
+                },
+                {
+                    "id": "as_value_json_field_002",
+                    "name": "value",
+                    "type": "json",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "as_description_text_field_003",
+                    "name": "description",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 500,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "as_public_bool_field_004",
+                    "name": "is_public",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "is_public = true || @request.auth.role = \"admin\"",
+            "viewRule": "is_public = true || @request.auth.role = \"admin\"",
+            "createRule": "@request.auth.role = \"admin\"",
+            "updateRule": "@request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_admin_audit_logs_001",
+            "name": "papo_admin_audit_logs",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "al_actor_rel_field_001",
+                    "name": "actor",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "al_action_text_field_002",
+                    "name": "action",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 2,
+                        "max": 120,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "al_collection_text_field_003",
+                    "name": "target_collection",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 120,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "al_record_text_field_004",
+                    "name": "target_record",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 120,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "al_before_json_field_005",
+                    "name": "before",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "al_after_json_field_006",
+                    "name": "after",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "al_ip_text_field_007",
+                    "name": "ip_address",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 80,
+                        "pattern": ""
                     }
                 }
             ],
-            "listRule": "@request.auth.id != \"\"",
-            "viewRule": "@request.auth.id != \"\"",
-            "createRule": "",
+            "listRule": "@request.auth.role = \"admin\"",
+            "viewRule": "@request.auth.role = \"admin\"",
+            "createRule": "@request.auth.role = \"admin\"",
             "updateRule": "",
             "deleteRule": ""
         }

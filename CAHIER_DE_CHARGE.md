@@ -1,68 +1,2762 @@
-# Cahier des Charges - Application PAPO
+# Cahier des charges complet — PAPO Android Flutter + Panel Admin Web
 
-## 1. Introduction
-PAPO est une solution de paiement et de services financiers intégrés visant à offrir une expérience utilisateur fluide, sécurisée et polyvalente. Ce document détaille les spécifications fonctionnelles et techniques pour la refonte de l'interface et l'ajout de nouvelles fonctionnalités majeures.
+## 1. Vision produit
+PAPO est une application Android Flutter de paiement, tontine et assistance client, connectée à un backend PocketBase auto-hébergé à l'adresse `http://82.165.150.150:20080/`. Le produit doit fonctionner en ligne et en mode proximité/offline contrôlé via NFC, QR code et Bluetooth, avec synchronisation en temps réel dès que la connexion revient.
 
-## 2. Fonctionnalités Principales
+Objectif utilisateur : permettre à un client, marchand, organisateur de cercle/tontine ou agent support d'exécuter ses opérations financières et d'assistance depuis une interface claire, rapide, sécurisée et culturellement identifiable.
 
-### 2.1 Cercle (Tontines)
-*   **Création de Cercle :** Possibilité pour un utilisateur de créer une tontine avec des paramètres définis (montant de la cotisation, fréquence, nombre de participants).
-*   **Gestion des Membres :** Invitation via numéro de téléphone ou QR code.
-*   **Automatique/Manuel :** Prélèvement automatique des cotisations sur le portefeuille PAPO.
-*   **Suivi en temps réel :** Calendrier des tours de rôle, historique des paiements et statut des membres.
+## 2. Périmètre fonctionnel
 
-### 2.2 Paiement Offline & Proximité
-*   **Paiement NFC :** Paiement sans contact entre deux appareils compatibles ou via un tag NFC.
-*   **Paiement QR Code :** Génération de QR codes dynamiques pour les transactions marchandes ou entre particuliers.
-*   **Paiement Bluetooth :** Alternative pour les paiements de proximité sans connexion internet immédiate.
-*   **Synchronisation différée :** Les transactions offline sont sécurisées localement et synchronisées dès que la connexion est rétablie.
+### 2.1 Application mobile Android Flutter
+- Authentification par numéro de téléphone + code PIN, avec biométrie locale après première connexion.
+- Tableau de bord portefeuille : solde, dernières transactions, actions rapides, alertes de sécurité.
+- Paiement P2P et marchand : transfert classique, QR dynamique, NFC, Bluetooth de proximité.
+- Paiement offline : génération d'un payload signé, stockage local chiffré, anti-rejeu par `nonce` et `payload_hash`, synchronisation différée dans `papo_offline_sessions` puis consolidation dans `papo_transactions`.
+- Cercles/tontines : création, invitation, ordre de passage, cotisations, pénalités, versements, suivi temps réel.
+- Notifications : centre de notifications, préférences push/SMS/email, rappels de tontine, sécurité, support et écosystème.
+- Écosystème : vitrine des autres services/apps du groupe, liens profonds, promotions et services partenaires.
+- Aide/support : tickets avec SLA 48h, chat par ticket, pièces jointes, FAQ dynamique.
+- KYC : soumission de documents, suivi du statut, motif de rejet, niveaux de compte.
 
-### 2.3 Gestion des Notifications
-*   **Notifications Push :** Alertes de transaction, rappels de tontine, messages de support.
-*   **Centre de Notifications :** Historique complet des notifications au sein de l'application.
-*   **Paramétrage :** Personnalisation des alertes (son, importance, types de notifications).
+### 2.2 Panel admin web
+Le panel admin web peut démarrer avec l'interface PocketBase Admin UI puis évoluer vers un dashboard Flutter Web/React dédié. Il doit couvrir :
+- utilisateurs, rôles, statuts, KYC et blocage de comptes ;
+- transactions, remboursements, gel de wallet et audit ;
+- tontines, litiges, membres, contributions et payouts ;
+- tickets support, assignation agents, respect du SLA 48h ;
+- notifications et campagnes ;
+- catalogue écosystème ;
+- paramètres applicatifs ;
+- journaux d'audit administrateur.
 
-### 2.4 Écosystème PAPO
-*   **Vitrine des Services :** Présentation des autres services et applications du groupe.
-*   **Intégration fluide :** Accès direct ou liens profonds vers les applications partenaires.
-*   **Avantages croisés :** Réductions ou bonus pour l'utilisation multi-services.
+## 3. Direction artistique — design africain premium
 
-### 2.5 Module d'Aide & Support
-*   **Tickets de Support :** Création de tickets avec une garantie de réponse sous 48h.
-*   **Chat en direct :** Discussion instantanée avec des agents de support ou un bot intelligent.
-*   **FAQ :** Base de connaissances dynamique pour les questions fréquentes.
+### 3.1 Principes visuels
+- Identité panafricaine moderne : chaleur terre cuite, or sahélien, indigo textile, vert savane, charbon profond.
+- Motifs inspirés bogolan/kente/ndop utilisés en texture subtile, jamais en surcharge : cartes, headers, splash, empty states.
+- Formes : coins arrondis généreux, cartes flottantes, séparateurs organiques, icônes linéaires épaisses.
+- Typographie : `Poppins` pour l'interface, hiérarchie forte, chiffres financiers grands et lisibles.
+- Accessibilité : contraste AA minimum, états d'erreur explicites, tailles tactiles ≥ 48 px.
 
-## 3. Refonte de l'Interface (UI/UX)
+### 3.2 Thème clair — “Savane solaire”
+- Primaire : `#A44A2A` terre cuite.
+- Secondaire : `#D89216` or sahel.
+- Tertiaire : `#2F6B4F` vert baobab.
+- Fond : `#FFF8ED` sable clair.
+- Surface : `#FFFFFF` ivoire.
+- Texte : `#241A14` ébène chaud.
+- Gradient signature : `#A44A2A → #D89216 → #2F6B4F`.
+- Usage : onboarding, wallet card, boutons principaux, badges de réussite.
 
-### 3.1 Design Mobile
-*   **Expérience Moderne :** Navigation intuitive, animations fluides et composants standardisés.
-*   **Cohérence Visuelle :** Utilisation d'une grille stricte et d'une typographie lisible.
+### 3.3 Thème sombre — “Nuit indigo”
+- Primaire : `#D9A441` or doux.
+- Secondaire : `#1F8A70` turquoise profond.
+- Tertiaire : `#4B5BD7` indigo textile.
+- Fond : `#080A12` nuit profonde.
+- Surface : `#121827` bleu charbon.
+- Texte : `#F6EAD2` ivoire nocturne.
+- Gradient signature : `#080A12 → #1B2A5B → #1F8A70`.
+- Usage : mode OLED, cartes financières, admin nocturne, alertes sécurisées.
 
-### 3.2 Interface Administration
-*   **Dashboard Complet :** Vue d'ensemble des transactions, utilisateurs et tickets.
-*   **Gestion des Paramètres :** Configuration globale de l'application et de l'écosystème.
+## 4. Architecture technique
 
-### 3.3 Thèmes (Clair et Sombre)
-*   **Thème Clair :**
-    *   Primaire : #3F51B5 (Bleu Indigo)
-    *   Secondaire : #FF4081 (Rose Accent)
-    *   Fond : #F5F5F5 (Gris Très Clair)
-    *   Surface : #FFFFFF
-    *   Texte : #212121
-*   **Thème Sombre :**
-    *   Primaire : #9FA8DA
-    *   Secondaire : #FF80AB
-    *   Fond : #121212
-    *   Surface : #1E1E1E
-    *   Texte : #E0E0E0
+### 4.1 Frontend Flutter
+- Architecture recommandée : feature-first + services PocketBase + modèles typés.
+- SDK PocketBase Dart :
 
-## 4. Spécifications Techniques
+```dart
+import 'package:pocketbase/pocketbase.dart';
 
-### 4.1 Backend - PocketBase
-Utilisation de PocketBase pour la gestion en temps réel des données, de l'authentification et du stockage des fichiers. Le schéma doit être optimisé pour la robustesse et la rapidité des requêtes `expand`.
+final pb = PocketBase('http://82.165.150.150:20080/');
 
-### 4.2 Temps Réel
-Toutes les collections liées aux transactions, tontines et messages de chat doivent supporter les abonnements en temps réel pour une mise à jour instantanée de l'interface utilisateur.
+final record = await pb.collection('papo_users').getOne(
+  'RECORD_ID',
+  expand: 'relField1,relField2.subRelField',
+);
+```
 
-## 5. Schéma de Données (PocketBase)
-*Voir le fichier `pb_schema.json` pour le détail complet des collections et des relations.*
+- Collections principales en temps réel : `papo_wallets`, `papo_transactions`, `papo_payment_requests`, `papo_offline_sessions`, `papo_tontines`, `papo_tontine_members`, `papo_tontine_contributions`, `papo_tontine_payouts`, `papo_notifications`, `papo_support_tickets`, `papo_support_messages`.
+
+### 4.2 Backend PocketBase
+- Importer `pb_schema.json` depuis PocketBase Admin > Settings > Import collections.
+- La collection auth s'appelle `papo_users` pour correspondre à l'API mobile demandée.
+- Les relations utilisent l'id système `_pb_users_auth_`, compatible avec PocketBase.
+- Les règles protègent les données propriétaire et ouvrent les opérations admin via `@request.auth.role = "admin"`.
+- Les champs JSON servent aux payloads signés, préférences, limites et métadonnées évolutives.
+
+### 4.3 Temps réel
+Exemples d'abonnements Flutter :
+
+```dart
+await pb.collection('papo_transactions').subscribe('*', (event) {
+  final data = event.record?.toJson();
+  // Recharger le wallet et l'historique si sender/receiver == utilisateur courant.
+});
+
+await pb.collection('papo_support_messages').subscribe('*', (event) {
+  // Rafraîchir le chat du ticket ouvert.
+});
+```
+
+## 5. Modèle de données PocketBase
+
+| Collection | Type | Taille |
+|---|---:|---:|
+| `papo_users` | `auth` | 13 champs |
+| `papo_wallets` | `base` | 6 champs |
+| `papo_devices` | `base` | 7 champs |
+| `papo_merchant_profiles` | `base` | 8 champs |
+| `papo_transactions` | `base` | 13 champs |
+| `papo_payment_requests` | `base` | 9 champs |
+| `papo_offline_sessions` | `base` | 13 champs |
+| `papo_kyc` | `base` | 9 champs |
+| `papo_tontines` | `base` | 11 champs |
+| `papo_tontine_members` | `base` | 6 champs |
+| `papo_tontine_contributions` | `base` | 7 champs |
+| `papo_tontine_payouts` | `base` | 7 champs |
+| `papo_notifications` | `base` | 7 champs |
+| `papo_notification_preferences` | `base` | 8 champs |
+| `papo_push_tokens` | `base` | 5 champs |
+| `papo_support_tickets` | `base` | 8 champs |
+| `papo_support_messages` | `base` | 5 champs |
+| `papo_faq_articles` | `base` | 6 champs |
+| `papo_ecosystem` | `base` | 8 champs |
+| `papo_app_settings` | `base` | 4 champs |
+| `papo_admin_audit_logs` | `base` | 7 champs |
+
+## 6. Règles métier essentielles
+- Un wallet actif est lié à un seul utilisateur.
+- Une transaction ne doit jamais modifier directement le solde côté client ; le client crée une intention, l'admin/hook serveur valide la transaction et ajuste le wallet.
+- Toute opération offline doit contenir `nonce`, `payload_hash`, `signed_payload`, `expires_at` et `device` si disponible.
+- Un ticket support doit définir `response_due_at = created + 48h`.
+- Les documents KYC restent lisibles uniquement par le propriétaire et les administrateurs.
+- Les messages support internes (`is_internal = true`) doivent être affichés uniquement côté admin.
+- Les actions admin critiques doivent créer une entrée dans `papo_admin_audit_logs`.
+
+## 7. Parcours utilisateurs
+
+### Client
+1. Connexion avec téléphone + PIN.
+2. Consultation du wallet.
+3. Paiement QR/NFC/Bluetooth ou transfert classique.
+4. Suivi des transactions en temps réel.
+5. Participation à une tontine.
+6. Création d'un ticket si problème.
+
+### Marchand
+1. Activation profil marchand après KYC.
+2. Génération d'une demande de paiement QR/NFC.
+3. Réception de confirmation temps réel.
+4. Consultation des ventes et remboursements.
+
+### Admin/support
+1. Connexion compte `role = admin` ou `support_agent`.
+2. Traitement KYC et tickets.
+3. Supervision transactions/offline.
+4. Publication FAQ, notifications et services écosystème.
+
+## 8. Documentation d'installation
+
+### 8.1 Flutter
+```bash
+flutter pub get
+flutter run
+```
+
+### 8.2 PocketBase local/serveur
+1. Ouvrir `http://82.165.150.150:20080/_/`.
+2. Se connecter en super-admin.
+3. Aller dans Settings > Import collections.
+4. Importer le fichier `pb_schema.json`.
+5. Créer le premier utilisateur admin dans `papo_users` avec `role = admin`.
+6. Vérifier que l'app utilise `PocketBase('http://82.165.150.150:20080/')`.
+
+### 8.3 Tests minimaux après import
+- Créer un utilisateur `papo_users` avec téléphone et mot de passe/PIN.
+- Créer son `papo_wallets`.
+- Depuis Flutter, tester `authWithPassword(phone, pin)`.
+- Créer une transaction de test et vérifier le rafraîchissement en temps réel.
+- Créer un ticket puis envoyer un message dans `papo_support_messages`.
+
+## 9. Sécurité et robustesse
+- Le PIN doit être le mot de passe PocketBase, jamais un champ texte lisible.
+- Les payloads offline sont signés côté appareil et validés côté serveur avant solde.
+- Les suppressions de données financières sont réservées admin et doivent rester auditées.
+- Les fichiers KYC ont une limite stricte et des types MIME contrôlés.
+- Les rôles sont centralisés dans `papo_users.role`.
+- Les règles API évitent l'accès public aux données sensibles.
+
+## 10. Roadmap conseillée
+1. Stabiliser auth, wallet, transactions en ligne.
+2. Brancher temps réel et notifications.
+3. Ajouter QR dynamique puis NFC.
+4. Ajouter Bluetooth/offline avec signature.
+5. Finaliser tontines.
+6. Finaliser support 48h + chat.
+7. Durcir admin web + audit.
+8. Tests terrain Android bas réseau.
+
+## 11. JSON complet à importer dans PocketBase
+
+```json
+{
+    "collections": [
+        {
+            "id": "_pb_users_auth_",
+            "name": "papo_users",
+            "type": "auth",
+            "system": true,
+            "schema": [
+                {
+                    "id": "u_full_name_field_001",
+                    "name": "name",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 2,
+                        "max": 120,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "u_avatar_file_field_002",
+                    "name": "avatar",
+                    "type": "file",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "maxSize": 5242880,
+                        "mimeTypes": [
+                            "image/jpeg",
+                            "image/png",
+                            "image/webp",
+                            "image/svg+xml"
+                        ],
+                        "thumbs": [
+                            "128x128",
+                            "320x320"
+                        ]
+                    }
+                },
+                {
+                    "id": "u_phone_text_field_003",
+                    "name": "phone",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 8,
+                        "max": 15,
+                        "pattern": "^\\+[1-9]\\d{1,14}$|^\\d{8,15}$"
+                    }
+                },
+                {
+                    "id": "u_role_select_field_004",
+                    "name": "role",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "customer",
+                            "merchant",
+                            "support_agent",
+                            "admin"
+                        ]
+                    }
+                },
+                {
+                    "id": "u_status_select_field_005",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "active",
+                            "suspended",
+                            "blocked",
+                            "pending_review"
+                        ]
+                    }
+                },
+                {
+                    "id": "u_theme_select_field_006",
+                    "name": "theme_preference",
+                    "type": "select",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "light",
+                            "dark",
+                            "system"
+                        ]
+                    }
+                },
+                {
+                    "id": "u_lang_select_field_007",
+                    "name": "preferred_language",
+                    "type": "select",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "fr",
+                            "en",
+                            "ln",
+                            "sw",
+                            "wo"
+                        ]
+                    }
+                },
+                {
+                    "id": "u_kyc_level_num_field_008",
+                    "name": "kyc_level",
+                    "type": "number",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 3,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "u_merchant_bool_field_009",
+                    "name": "merchant_enabled",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "u_bio_bool_field_010",
+                    "name": "biometrics_enabled",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "u_offline_bool_field_011",
+                    "name": "offline_payments_enabled",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "u_last_seen_date_field_012",
+                    "name": "last_seen_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "u_security_json_field_013",
+                    "name": "security_settings",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "id = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "id = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "",
+            "updateRule": "id = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\"",
+            "auth": {
+                "allowEmailAuth": false,
+                "allowOAuth2Auth": false,
+                "allowUsernameAuth": false,
+                "allowPhoneAuth": true,
+                "minPasswordLength": 4,
+                "onlyEmailDomains": [],
+                "onlyVerified": false,
+                "requireEmailVerification": false
+            }
+        },
+        {
+            "id": "col_papo_wallets_001",
+            "name": "papo_wallets",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "w_user_rel_field_001",
+                    "name": "user",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "w_balance_num_field_002",
+                    "name": "balance",
+                    "type": "number",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "w_currency_text_field_003",
+                    "name": "currency",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 3,
+                        "max": 3,
+                        "pattern": "^[A-Z]{3}$"
+                    }
+                },
+                {
+                    "id": "w_reserved_num_field_004",
+                    "name": "reserved_balance",
+                    "type": "number",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "w_status_select_field_005",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "active",
+                            "frozen",
+                            "closed"
+                        ]
+                    }
+                },
+                {
+                    "id": "w_limits_json_field_006",
+                    "name": "limits",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "updateRule": "@request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_devices_001",
+            "name": "papo_devices",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "d_user_rel_field_001",
+                    "name": "user",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "d_device_id_text_field_002",
+                    "name": "device_id",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 10,
+                        "max": 255,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "d_name_text_field_003",
+                    "name": "name",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": 120,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "d_platform_select_field_004",
+                    "name": "platform",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "android",
+                            "ios",
+                            "web",
+                            "desktop"
+                        ]
+                    }
+                },
+                {
+                    "id": "d_public_key_text_field_005",
+                    "name": "public_key",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 20,
+                        "max": 4096,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "d_trusted_bool_field_006",
+                    "name": "is_trusted",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "d_last_seen_date_field_007",
+                    "name": "last_seen_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                }
+            ],
+            "listRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "user = @request.auth.id",
+            "updateRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "user = @request.auth.id || @request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_merchant_profiles_001",
+            "name": "papo_merchant_profiles",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "m_user_rel_field_001",
+                    "name": "user",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "m_business_text_field_002",
+                    "name": "business_name",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 2,
+                        "max": 160,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "m_category_text_field_003",
+                    "name": "category",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 2,
+                        "max": 80,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "m_city_text_field_004",
+                    "name": "city",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": 80,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "m_address_text_field_005",
+                    "name": "address",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": 255,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "m_logo_file_field_006",
+                    "name": "logo",
+                    "type": "file",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "maxSize": 5242880,
+                        "mimeTypes": [
+                            "image/jpeg",
+                            "image/png",
+                            "image/webp"
+                        ],
+                        "thumbs": [
+                            "256x256"
+                        ]
+                    }
+                },
+                {
+                    "id": "m_status_select_field_007",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "pending",
+                            "approved",
+                            "rejected",
+                            "suspended"
+                        ]
+                    }
+                },
+                {
+                    "id": "m_hours_json_field_008",
+                    "name": "opening_hours",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "@request.auth.id != \"\"",
+            "viewRule": "@request.auth.id != \"\"",
+            "createRule": "user = @request.auth.id",
+            "updateRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_transactions_001",
+            "name": "papo_transactions",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "t_sender_rel_field_001",
+                    "name": "sender",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "t_receiver_rel_field_002",
+                    "name": "receiver",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "t_wallet_rel_field_003",
+                    "name": "wallet",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_wallets_001",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "t_amount_num_field_004",
+                    "name": "amount",
+                    "type": "number",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 0.01,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "t_fee_num_field_005",
+                    "name": "fee",
+                    "type": "number",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "t_currency_text_field_006",
+                    "name": "currency",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 3,
+                        "max": 3,
+                        "pattern": "^[A-Z]{3}$"
+                    }
+                },
+                {
+                    "id": "t_type_select_field_007",
+                    "name": "type",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "deposit",
+                            "withdrawal",
+                            "transfer",
+                            "merchant_payment",
+                            "tontine_contribution",
+                            "tontine_payout",
+                            "refund"
+                        ]
+                    }
+                },
+                {
+                    "id": "t_method_select_field_008",
+                    "name": "method",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "app",
+                            "nfc",
+                            "qr",
+                            "bluetooth",
+                            "cash_agent",
+                            "bank",
+                            "mobile_money"
+                        ]
+                    }
+                },
+                {
+                    "id": "t_status_select_field_009",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "draft",
+                            "pending",
+                            "completed",
+                            "failed",
+                            "cancelled",
+                            "reversed"
+                        ]
+                    }
+                },
+                {
+                    "id": "t_reference_text_field_010",
+                    "name": "reference",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 8,
+                        "max": 80,
+                        "pattern": "^[A-Z0-9_-]+$"
+                    }
+                },
+                {
+                    "id": "t_external_ref_text_field_011",
+                    "name": "external_reference",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": 160,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "t_notes_text_field_012",
+                    "name": "notes",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 255,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "t_metadata_json_field_013",
+                    "name": "metadata",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "sender = @request.auth.id || receiver = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "sender = @request.auth.id || receiver = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "sender = @request.auth.id || @request.auth.role = \"admin\"",
+            "updateRule": "@request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_payment_requests_001",
+            "name": "papo_payment_requests",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "pr_requester_rel_field_001",
+                    "name": "requester",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "pr_payer_rel_field_002",
+                    "name": "payer",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "pr_amount_num_field_003",
+                    "name": "amount",
+                    "type": "number",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 0.01,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "pr_currency_text_field_004",
+                    "name": "currency",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 3,
+                        "max": 3,
+                        "pattern": "^[A-Z]{3}$"
+                    }
+                },
+                {
+                    "id": "pr_method_select_field_005",
+                    "name": "method",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "qr",
+                            "nfc",
+                            "bluetooth",
+                            "link"
+                        ]
+                    }
+                },
+                {
+                    "id": "pr_token_text_field_006",
+                    "name": "token",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 12,
+                        "max": 180,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "pr_status_select_field_007",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "open",
+                            "paid",
+                            "expired",
+                            "cancelled"
+                        ]
+                    }
+                },
+                {
+                    "id": "pr_expires_date_field_008",
+                    "name": "expires_at",
+                    "type": "date",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "pr_payload_json_field_009",
+                    "name": "payload",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "requester = @request.auth.id || payer = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "requester = @request.auth.id || payer = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "requester = @request.auth.id || @request.auth.role = \"admin\"",
+            "updateRule": "requester = @request.auth.id || payer = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "requester = @request.auth.id || @request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_offline_sessions_001",
+            "name": "papo_offline_sessions",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "os_initiator_rel_field_001",
+                    "name": "initiator",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "os_counter_rel_field_002",
+                    "name": "counterparty",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "os_device_rel_field_003",
+                    "name": "device",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_devices_001",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "os_method_select_field_004",
+                    "name": "method",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "nfc",
+                            "bluetooth",
+                            "qr"
+                        ]
+                    }
+                },
+                {
+                    "id": "os_amount_num_field_005",
+                    "name": "amount",
+                    "type": "number",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 0.01,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "os_currency_text_field_006",
+                    "name": "currency",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 3,
+                        "max": 3,
+                        "pattern": "^[A-Z]{3}$"
+                    }
+                },
+                {
+                    "id": "os_nonce_text_field_007",
+                    "name": "nonce",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 16,
+                        "max": 160,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "os_hash_text_field_008",
+                    "name": "payload_hash",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 32,
+                        "max": 160,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "os_signed_text_field_009",
+                    "name": "signed_payload",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 32,
+                        "max": 4096,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "os_status_select_field_010",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "created",
+                            "accepted",
+                            "synced",
+                            "rejected",
+                            "expired"
+                        ]
+                    }
+                },
+                {
+                    "id": "os_expires_date_field_011",
+                    "name": "expires_at",
+                    "type": "date",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "os_synced_date_field_012",
+                    "name": "synced_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "os_metadata_json_field_013",
+                    "name": "metadata",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "initiator = @request.auth.id || counterparty = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "initiator = @request.auth.id || counterparty = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "initiator = @request.auth.id",
+            "updateRule": "initiator = @request.auth.id || counterparty = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_kyc_001",
+            "name": "papo_kyc",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "k_user_rel_field_001",
+                    "name": "user",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "k_doc_type_select_field_002",
+                    "name": "document_type",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "id_card",
+                            "passport",
+                            "driver_license",
+                            "residence_permit",
+                            "proof_of_address"
+                        ]
+                    }
+                },
+                {
+                    "id": "k_doc_number_text_field_003",
+                    "name": "document_number",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 4,
+                        "max": 80,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "k_doc_file_field_004",
+                    "name": "document_file",
+                    "type": "file",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 3,
+                        "maxSize": 10485760,
+                        "mimeTypes": [
+                            "image/jpeg",
+                            "image/png",
+                            "application/pdf"
+                        ],
+                        "thumbs": [
+                            "640x640"
+                        ]
+                    }
+                },
+                {
+                    "id": "k_status_select_field_005",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "draft",
+                            "submitted",
+                            "pending_review",
+                            "approved",
+                            "rejected"
+                        ]
+                    }
+                },
+                {
+                    "id": "k_reviewer_rel_field_006",
+                    "name": "reviewer",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "k_reason_text_field_007",
+                    "name": "rejection_reason",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 500,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "k_reviewed_date_field_008",
+                    "name": "reviewed_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "k_checks_json_field_009",
+                    "name": "checks",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "user = @request.auth.id",
+            "updateRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_tontines_001",
+            "name": "papo_tontines",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "tn_name_text_field_001",
+                    "name": "name",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 3,
+                        "max": 120,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "tn_desc_text_field_002",
+                    "name": "description",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 1000,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "tn_creator_rel_field_003",
+                    "name": "creator",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "tn_amount_num_field_004",
+                    "name": "contribution_amount",
+                    "type": "number",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "tn_currency_text_field_005",
+                    "name": "currency",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 3,
+                        "max": 3,
+                        "pattern": "^[A-Z]{3}$"
+                    }
+                },
+                {
+                    "id": "tn_frequency_select_field_006",
+                    "name": "frequency",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "daily",
+                            "weekly",
+                            "biweekly",
+                            "monthly"
+                        ]
+                    }
+                },
+                {
+                    "id": "tn_capacity_num_field_007",
+                    "name": "max_members",
+                    "type": "number",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 2,
+                        "max": 200,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "tn_start_date_field_008",
+                    "name": "start_date",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "tn_status_select_field_009",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "draft",
+                            "open",
+                            "active",
+                            "paused",
+                            "completed",
+                            "cancelled"
+                        ]
+                    }
+                },
+                {
+                    "id": "tn_auto_bool_field_010",
+                    "name": "auto_debit_enabled",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "tn_rules_json_field_011",
+                    "name": "rules",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "@request.auth.id != \"\"",
+            "viewRule": "@request.auth.id != \"\"",
+            "createRule": "@request.auth.id != \"\"",
+            "updateRule": "creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "creator = @request.auth.id || @request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_tontine_members_001",
+            "name": "papo_tontine_members",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "tm_tontine_rel_field_001",
+                    "name": "tontine",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_tontines_001",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "tm_user_rel_field_002",
+                    "name": "user",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "tm_role_select_field_003",
+                    "name": "role",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "organizer",
+                            "treasurer",
+                            "member"
+                        ]
+                    }
+                },
+                {
+                    "id": "tm_status_select_field_004",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "invited",
+                            "joined",
+                            "left",
+                            "removed",
+                            "blocked"
+                        ]
+                    }
+                },
+                {
+                    "id": "tm_payout_order_num_field_005",
+                    "name": "payout_order",
+                    "type": "number",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "tm_joined_date_field_006",
+                    "name": "joined_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                }
+            ],
+            "listRule": "user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "updateRule": "user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "tontine.creator = @request.auth.id || @request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_tontine_contrib_001",
+            "name": "papo_tontine_contributions",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "tc_tontine_rel_field_001",
+                    "name": "tontine",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_tontines_001",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "tc_member_rel_field_002",
+                    "name": "member",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_tontine_members_001",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "tc_transaction_rel_field_003",
+                    "name": "transaction",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_transactions_001",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "tc_amount_num_field_004",
+                    "name": "amount",
+                    "type": "number",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 0.01,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "tc_due_date_field_005",
+                    "name": "due_date",
+                    "type": "date",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "tc_paid_date_field_006",
+                    "name": "paid_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "tc_status_select_field_007",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "pending",
+                            "paid",
+                            "late",
+                            "waived",
+                            "failed"
+                        ]
+                    }
+                }
+            ],
+            "listRule": "member.user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "member.user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "updateRule": "member.user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "tontine.creator = @request.auth.id || @request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_tontine_payouts_001",
+            "name": "papo_tontine_payouts",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "tp_tontine_rel_field_001",
+                    "name": "tontine",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_tontines_001",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "tp_member_rel_field_002",
+                    "name": "member",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_tontine_members_001",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "tp_transaction_rel_field_003",
+                    "name": "transaction",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_transactions_001",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "tp_amount_num_field_004",
+                    "name": "amount",
+                    "type": "number",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 0.01,
+                        "max": null,
+                        "positive": true
+                    }
+                },
+                {
+                    "id": "tp_scheduled_date_field_005",
+                    "name": "scheduled_at",
+                    "type": "date",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "tp_paid_date_field_006",
+                    "name": "paid_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "tp_status_select_field_007",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "scheduled",
+                            "processing",
+                            "paid",
+                            "failed",
+                            "cancelled"
+                        ]
+                    }
+                }
+            ],
+            "listRule": "member.user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "member.user = @request.auth.id || tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "updateRule": "tontine.creator = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_notifications_001",
+            "name": "papo_notifications",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "nt_user_rel_field_001",
+                    "name": "user",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "nt_title_text_field_002",
+                    "name": "title",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": 140,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "nt_message_text_field_003",
+                    "name": "message",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": 1000,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "nt_type_select_field_004",
+                    "name": "type",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "info",
+                            "security",
+                            "transaction",
+                            "tontine",
+                            "support",
+                            "ecosystem",
+                            "kyc"
+                        ]
+                    }
+                },
+                {
+                    "id": "nt_read_bool_field_005",
+                    "name": "is_read",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "nt_deep_link_text_field_006",
+                    "name": "deep_link",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 255,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "nt_payload_json_field_007",
+                    "name": "payload",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "@request.auth.role = \"admin\"",
+            "updateRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "user = @request.auth.id || @request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_notification_prefs_001",
+            "name": "papo_notification_preferences",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "np_user_rel_field_001",
+                    "name": "user",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "np_push_bool_field_002",
+                    "name": "push_enabled",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "np_sms_bool_field_003",
+                    "name": "sms_enabled",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "np_email_bool_field_004",
+                    "name": "email_enabled",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "np_transaction_bool_field_005",
+                    "name": "transaction_alerts",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "np_tontine_bool_field_006",
+                    "name": "tontine_alerts",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "np_support_bool_field_007",
+                    "name": "support_alerts",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "np_quiet_json_field_008",
+                    "name": "quiet_hours",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "user = @request.auth.id",
+            "updateRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "user = @request.auth.id || @request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_push_tokens_001",
+            "name": "papo_push_tokens",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "pt_user_rel_field_001",
+                    "name": "user",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "pt_device_rel_field_002",
+                    "name": "device",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_devices_001",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "pt_token_text_field_003",
+                    "name": "token",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 20,
+                        "max": 4096,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "pt_provider_select_field_004",
+                    "name": "provider",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "fcm",
+                            "apns",
+                            "webpush"
+                        ]
+                    }
+                },
+                {
+                    "id": "pt_last_used_date_field_005",
+                    "name": "last_used_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                }
+            ],
+            "listRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "user = @request.auth.id",
+            "updateRule": "user = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "user = @request.auth.id || @request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_support_tickets_001",
+            "name": "papo_support_tickets",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "st_user_rel_field_001",
+                    "name": "user",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "st_assignee_rel_field_002",
+                    "name": "assignee",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "st_subject_text_field_003",
+                    "name": "subject",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 5,
+                        "max": 200,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "st_category_select_field_004",
+                    "name": "category",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "account",
+                            "payment",
+                            "tontine",
+                            "kyc",
+                            "technical",
+                            "other"
+                        ]
+                    }
+                },
+                {
+                    "id": "st_priority_select_field_005",
+                    "name": "priority",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "low",
+                            "medium",
+                            "high",
+                            "urgent"
+                        ]
+                    }
+                },
+                {
+                    "id": "st_status_select_field_006",
+                    "name": "status",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "open",
+                            "in_progress",
+                            "waiting_customer",
+                            "resolved",
+                            "closed"
+                        ]
+                    }
+                },
+                {
+                    "id": "st_due_date_field_007",
+                    "name": "response_due_at",
+                    "type": "date",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                },
+                {
+                    "id": "st_closed_date_field_008",
+                    "name": "closed_at",
+                    "type": "date",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": "",
+                        "max": ""
+                    }
+                }
+            ],
+            "listRule": "user = @request.auth.id || assignee = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "user = @request.auth.id || assignee = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "user = @request.auth.id",
+            "updateRule": "assignee = @request.auth.id || @request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_support_messages_001",
+            "name": "papo_support_messages",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "sm_ticket_rel_field_001",
+                    "name": "ticket",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "col_papo_support_tickets_001",
+                        "cascadeDelete": true,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "sm_sender_rel_field_002",
+                    "name": "sender",
+                    "type": "relation",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "sm_content_text_field_003",
+                    "name": "content",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 1,
+                        "max": 4000,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "sm_attachment_file_field_004",
+                    "name": "attachment",
+                    "type": "file",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 4,
+                        "maxSize": 10485760,
+                        "mimeTypes": [
+                            "image/jpeg",
+                            "image/png",
+                            "application/pdf",
+                            "text/plain"
+                        ],
+                        "thumbs": [
+                            "640x640"
+                        ]
+                    }
+                },
+                {
+                    "id": "sm_internal_bool_field_005",
+                    "name": "is_internal",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "(is_internal = false && ticket.user = @request.auth.id) || ticket.assignee = @request.auth.id || @request.auth.role = \"admin\"",
+            "viewRule": "(is_internal = false && ticket.user = @request.auth.id) || ticket.assignee = @request.auth.id || @request.auth.role = \"admin\"",
+            "createRule": "ticket.user = @request.auth.id || ticket.assignee = @request.auth.id || @request.auth.role = \"admin\"",
+            "updateRule": "@request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_faq_articles_001",
+            "name": "papo_faq_articles",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "fq_title_text_field_001",
+                    "name": "title",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 3,
+                        "max": 180,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "fq_slug_text_field_002",
+                    "name": "slug",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 3,
+                        "max": 180,
+                        "pattern": "^[a-z0-9-]+$"
+                    }
+                },
+                {
+                    "id": "fq_category_select_field_003",
+                    "name": "category",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "account",
+                            "payment",
+                            "offline",
+                            "tontine",
+                            "kyc",
+                            "support"
+                        ]
+                    }
+                },
+                {
+                    "id": "fq_content_text_field_004",
+                    "name": "content",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 20,
+                        "max": 8000,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "fq_publish_bool_field_005",
+                    "name": "is_published",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "fq_order_num_field_006",
+                    "name": "sort_order",
+                    "type": "number",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": null,
+                        "positive": true
+                    }
+                }
+            ],
+            "listRule": "is_published = true || @request.auth.role = \"admin\"",
+            "viewRule": "is_published = true || @request.auth.role = \"admin\"",
+            "createRule": "@request.auth.role = \"admin\"",
+            "updateRule": "@request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_ecosystem_001",
+            "name": "papo_ecosystem",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "ec_name_text_field_001",
+                    "name": "name",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 2,
+                        "max": 120,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "ec_slug_text_field_002",
+                    "name": "slug",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 2,
+                        "max": 120,
+                        "pattern": "^[a-z0-9-]+$"
+                    }
+                },
+                {
+                    "id": "ec_description_text_field_003",
+                    "name": "description",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 1000,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "ec_type_select_field_004",
+                    "name": "type",
+                    "type": "select",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "values": [
+                            "internal_app",
+                            "partner_service",
+                            "promotion",
+                            "web_service"
+                        ]
+                    }
+                },
+                {
+                    "id": "ec_url_text_field_005",
+                    "name": "url",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 5,
+                        "max": 500,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "ec_icon_file_field_006",
+                    "name": "icon",
+                    "type": "file",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "maxSelect": 1,
+                        "maxSize": 5242880,
+                        "mimeTypes": [
+                            "image/jpeg",
+                            "image/png",
+                            "image/svg+xml",
+                            "image/webp"
+                        ],
+                        "thumbs": [
+                            "256x256"
+                        ]
+                    }
+                },
+                {
+                    "id": "ec_active_bool_field_007",
+                    "name": "is_active",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "ec_metadata_json_field_008",
+                    "name": "metadata",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "is_active = true || @request.auth.role = \"admin\"",
+            "viewRule": "is_active = true || @request.auth.role = \"admin\"",
+            "createRule": "@request.auth.role = \"admin\"",
+            "updateRule": "@request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_app_settings_001",
+            "name": "papo_app_settings",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "as_key_text_field_001",
+                    "name": "key",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": true,
+                    "options": {
+                        "min": 2,
+                        "max": 120,
+                        "pattern": "^[a-z0-9_.-]+$"
+                    }
+                },
+                {
+                    "id": "as_value_json_field_002",
+                    "name": "value",
+                    "type": "json",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "as_description_text_field_003",
+                    "name": "description",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 500,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "as_public_bool_field_004",
+                    "name": "is_public",
+                    "type": "bool",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                }
+            ],
+            "listRule": "is_public = true || @request.auth.role = \"admin\"",
+            "viewRule": "is_public = true || @request.auth.role = \"admin\"",
+            "createRule": "@request.auth.role = \"admin\"",
+            "updateRule": "@request.auth.role = \"admin\"",
+            "deleteRule": "@request.auth.role = \"admin\""
+        },
+        {
+            "id": "col_papo_admin_audit_logs_001",
+            "name": "papo_admin_audit_logs",
+            "type": "base",
+            "system": false,
+            "schema": [
+                {
+                    "id": "al_actor_rel_field_001",
+                    "name": "actor",
+                    "type": "relation",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "collectionId": "_pb_users_auth_",
+                        "cascadeDelete": false,
+                        "minSelect": null,
+                        "maxSelect": 1,
+                        "displayFields": []
+                    }
+                },
+                {
+                    "id": "al_action_text_field_002",
+                    "name": "action",
+                    "type": "text",
+                    "system": false,
+                    "required": true,
+                    "unique": false,
+                    "options": {
+                        "min": 2,
+                        "max": 120,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "al_collection_text_field_003",
+                    "name": "target_collection",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 120,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "al_record_text_field_004",
+                    "name": "target_record",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 120,
+                        "pattern": ""
+                    }
+                },
+                {
+                    "id": "al_before_json_field_005",
+                    "name": "before",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "al_after_json_field_006",
+                    "name": "after",
+                    "type": "json",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {}
+                },
+                {
+                    "id": "al_ip_text_field_007",
+                    "name": "ip_address",
+                    "type": "text",
+                    "system": false,
+                    "required": false,
+                    "unique": false,
+                    "options": {
+                        "min": 0,
+                        "max": 80,
+                        "pattern": ""
+                    }
+                }
+            ],
+            "listRule": "@request.auth.role = \"admin\"",
+            "viewRule": "@request.auth.role = \"admin\"",
+            "createRule": "@request.auth.role = \"admin\"",
+            "updateRule": "",
+            "deleteRule": ""
+        }
+    ]
+}
+```

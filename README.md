@@ -1,96 +1,52 @@
-# 📱 PAPO - Solution de Paiement & Tontine Moderne
+# PAPO — Android Flutter + PocketBase + Panel Admin Web
 
-![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
-![PocketBase](https://img.shields.io/badge/PocketBase-%23000000.svg?style=for-the-badge&logo=pocketbase&logoColor=white)
-![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)
+PAPO est une application Flutter Android de paiement, tontines/cerccles, paiement de proximité/offline NFC/QR/Bluetooth, notifications, écosystème de services et support client avec tickets 48h + chat.
 
-**PAPO** est une application financière tout-en-un conçue pour simplifier les paiements quotidiens et moderniser la pratique traditionnelle de la tontine. Grâce à une interface premium et des fonctionnalités de pointe, PAPO offre une expérience sécurisée, fluide et accessible.
+## Backend PocketBase
 
----
+Serveur cible : `http://82.165.150.150:20080/`
 
-## 🚀 Fonctionnalités Clés
+La collection d'authentification est nommée `papo_users` afin que le SDK Flutter puisse utiliser :
 
-### 💳 Paiements Multi-Canaux
-- **NFC (Sans contact)** : Payez instantanément en approchant votre téléphone.
-- **QR Code** : Scannez ou générez des codes QR pour des transactions rapides.
-- **Bluetooth** : Paiements de proximité même sans connexion internet immédiate.
+```dart
+final pb = PocketBase('http://82.165.150.150:20080/');
+final record = await pb.collection('papo_users').getOne('RECORD_ID');
+```
 
-### 👥 Cercles (Tontines)
-- Créez ou rejoignez des cercles de confiance.
-- Automatisez vos cotisations.
-- Suivez l'ordre de réception en temps réel.
+Importez `pb_schema.json` dans PocketBase Admin > Settings > Import collections.
 
-### 💬 Support & Assistance
-- Système de tickets intégré avec réponse sous 48h.
-- Chat en direct avec des agents de support.
-- Base de connaissances (FAQ) interactive.
+## Design
 
-### 🌐 Écosystème
-- Découvrez les autres services du groupe PAPO.
-- Intégration transparente avec les applications partenaires.
+Le projet utilise une direction artistique africaine premium :
 
-### 🛡️ Sécurité & KYC
-- Vérification d'identité robuste (KYC).
-- Authentification par code PIN sécurisé.
-- Chiffrement des données de bout en bout.
+- thème clair **Savane solaire** : terre cuite, or sahel, vert baobab, sable clair ;
+- thème sombre **Nuit indigo** : nuit profonde, indigo textile, turquoise, or doux ;
+- gradients, cartes arrondies, motifs inspirés bogolan/kente/ndop en texture légère.
 
----
+## Documentation complète
 
-## 🎨 Design & UI/UX
-L'application propose deux thèmes cohérents et modernes :
-- **Thème Clair** : Une interface épurée avec des tons indigo et rose accent.
-- **Thème Sombre** : Un design "True Black" optimisé pour les écrans OLED et le confort visuel nocturne.
-- **Gradients Premium** : Utilisation de dégradés pour une sensation de profondeur et de modernité.
+Le cahier des charges complet, les règles métier, la documentation d'installation et le JSON PocketBase complet sont dans [`CAHIER_DE_CHARGE.md`](CAHIER_DE_CHARGE.md).
 
----
+## Développement Flutter
 
-## 🛠️ Stack Technique
+```bash
+flutter pub get
+flutter run
+```
 
-- **Frontend** : Flutter (Dart)
-- **Backend** : PocketBase (Golang based)
-- **State Management** : Provider
-- **Real-time** : SSE (Server-Sent Events) via PocketBase SDK
-- **CI/CD** : GitHub Actions (Auto-build APK/AAB)
+## Collections principales
 
----
-
-## ⚙️ Installation & Configuration
-
-### Prérequis
-- Flutter SDK (v3.16+)
-- Un serveur PocketBase opérationnel
-
-### Étapes
-1. **Cloner le projet**
-   ```bash
-   git clone <repository-url>
-   cd papo_app
-   ```
-
-2. **Installer les dépendances**
-   ```bash
-   flutter pub get
-   ```
-
-3. **Configuration Backend**
-   - Importez le fichier `pb_schema.json` dans votre interface PocketBase (Paramètres > Import Collections).
-   - Mettez à jour l'URL du serveur dans `lib/services/pocketbase_service.dart`.
-
-4. **Lancer l'application**
-   ```bash
-   flutter run
-   ```
-
----
-
-## 📦 Builds & Livraison
-Le projet utilise GitHub Actions pour générer automatiquement les fichiers de release :
-- **APK** : Pour une installation directe sur Android.
-- **AAB** : Pour la publication sur le Google Play Store.
-
-Les fichiers sont disponibles dans l'onglet **Actions** de votre dépôt GitHub après chaque push.
-
----
-
-## 📄 Licence
-© 2026 Groupe TE-SEA. Tous droits réservés.
+- `papo_users`
+- `papo_wallets`
+- `papo_transactions`
+- `papo_payment_requests`
+- `papo_offline_sessions`
+- `papo_tontines`
+- `papo_tontine_members`
+- `papo_tontine_contributions`
+- `papo_tontine_payouts`
+- `papo_notifications`
+- `papo_support_tickets`
+- `papo_support_messages`
+- `papo_ecosystem`
+- `papo_admin_audit_logs`
