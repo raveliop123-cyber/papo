@@ -26,17 +26,17 @@ dependencies:
   lottie: ^2.7.0
   
   # Authentification & Sécurité
-  local_auth: ^2.2.0
-  flutter_secure_storage: ^9.0.0
+  local_auth: ^2.3.0
+  flutter_secure_storage: ^9.2.0
   
   # Paiements Offline
-  nfc_manager: ^3.3.0
-  mobile_scanner: ^4.0.0
-  flutter_blue_plus: ^1.31.0
+  nfc_manager: ^3.4.0
+  mobile_scanner: ^5.0.0
+  flutter_blue_plus: ^1.32.0
   
   # Notifications
-  firebase_messaging: ^14.7.0
-  flutter_local_notifications: ^17.0.0
+  firebase_messaging: ^14.8.0
+  flutter_local_notifications: ^17.1.0
   
   # Utilitaires
   intl: ^0.19.0
