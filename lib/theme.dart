@@ -4,11 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 class AppTheme {
   // African-Inspired Palette
   // Light Mode: Warm Earth, Ochre, and Savanna Green
-  static const Color terracotta = Color(0xFFE2725B); // Earth
-  static const Color ochre = Color(0xFFCC7722); // Sun/Gold
-  static const Color savannaGreen = Color(0xFF8A9A5B); // Nature
-  static const Color lightSand = Color(0xFFFDF5E6); // Background
-  static const Color deepCoal = Color(0xFF2C2C2C); // Text
+  static const Color terracotta = Color(0xFFD2691E); // Refined Chocolate/Sienna
+  static const Color ochre = Color(0xFFDAA520); // Goldenrod
+  static const Color savannaGreen = Color(0xFF6B8E23); // Olive Drab
+  static const Color lightSand = Color(0xFFFEFCF8); // Ivory Background
+  static const Color deepCoal = Color(0xFF1A1A1A); // Deep Coal
 
   // Dark Mode: Deep Turquoise, Midnight Blue, and Bronze
   static const Color midnightBlue = Color(0xFF1A237E);
@@ -18,7 +18,7 @@ class AppTheme {
 
   // Gradients
   static const LinearGradient africanSunset = LinearGradient(
-    colors: [Color(0xFFE2725B), Color(0xFFCC7722)],
+    colors: [terracotta, ochre],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -54,9 +54,29 @@ class AppTheme {
         ),
       ),
       cardTheme: CardThemeData(
-        elevation: 2,
+        elevation: 0,
         color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: BorderSide(color: Colors.grey.withOpacity(0.1), width: 1),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: Colors.grey.withOpacity(0.1)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(color: terracotta, width: 2),
+        ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(

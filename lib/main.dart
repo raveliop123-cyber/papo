@@ -9,6 +9,7 @@ import 'screens/admin_dashboard.dart';
 import 'screens/payment_screen.dart';
 import 'services/pocketbase_service.dart';
 import 'theme.dart';
+import 'widgets/ping_button.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -30,6 +31,16 @@ class MainApp extends StatelessWidget {
         darkTheme: AppTheme.darkTheme,
         themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
+        builder: (context, child) {
+          return Scaffold(
+            body: Stack(
+              children: [
+                if (child != null) child,
+                const PingButton(),
+              ],
+            ),
+          );
+        },
         initialRoute: '/',
         routes: {
           '/': (context) => const AuthScreenWrapper(),
